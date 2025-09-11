@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { HiChevronLeft, HiArrowRight, HiCog } from "react-icons/hi";
-import FormWrapper from "./FormWrapper";
+import FormWrapper from "../shared/FormWrapper";
 import Link from "next/link";
 import { IconButton } from "@mui/material";
 
@@ -16,7 +16,7 @@ const ResetPasswordForm = () => {
   };
 
   return (
-    <div className="w-screen h-screen flex text-xs flex-col md:flex-row bg-white">
+    <div className="w-screen h-screen flex text-sm flex-col md:flex-row bg-white">
       <div className="w-full md:w-1/2 h-1/2 md:h-full flex items-center justify-center bg-gray-50 relative">
         <Image
           src="/images/7.png"
@@ -29,19 +29,6 @@ const ResetPasswordForm = () => {
       </div>
 
       <div className="w-full md:w-1/2 h-1/2 md:h-full flex flex-col justify-center items-center p-6 md:p-10">
-        <div className="top-left fixed top-10 flex items-center right-10 hover:underline">
-          <Link href="#">Need Help?</Link>
-          <IconButton
-            sx={{
-              borderRadius: "50%",
-              border: "1px solid #e0e0e0",
-              width: "50px",
-              height: "50px",   
-            }}
-          >
-            <HiCog />
-          </IconButton>
-        </div>
         <FormWrapper
           title="Reset Password"
           desc="Please enter the email address associated with your account and we'll email you a link to reset your password."
@@ -58,7 +45,6 @@ const ResetPasswordForm = () => {
               placeholder: "example@gmail.com",
             },
           ]}
-          oauthOptions={["google", "apple"]}
           extraLinks={[
             {
               href: "/auth/login",

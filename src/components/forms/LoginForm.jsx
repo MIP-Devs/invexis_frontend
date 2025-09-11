@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { IconButton, InputAdornment } from "@mui/material";
 import { HiEye, HiEyeOff, HiArrowRight } from "react-icons/hi";
-import FormWrapper from "./FormWrapper";
+import FormWrapper from "../shared/FormWrapper";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -87,6 +87,6 @@ const LoginPage = () => {
       </div>
     </div>
   );
-}
+};
 
 export default LoginPage;

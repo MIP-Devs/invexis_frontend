@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import ClientProviders from "./ClientProviders";
 import { Roboto } from "next/font/google";
 import { JetBrains_Mono } from "next/font/google";
+import { ThemeRegistry } from "./providers/ThemeRegistry";
 
 // const roboto = Roboto({
 //   subsets: ["latin"],
@@ -32,7 +33,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`font-metropolis antialiased`}>
-        <ClientProviders>{children}</ClientProviders>
+        <ClientProviders>
+          <ThemeRegistry>{children}</ThemeRegistry>
+        </ClientProviders>
       </body>
     </html>
   );
