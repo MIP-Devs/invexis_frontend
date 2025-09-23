@@ -6,6 +6,7 @@ import NavBar from '@/components/layouts/NavBar'
 import SideBar from "@/components/layouts/SideBar";
 import { Trash ,DownloadCloud } from "lucide-react";
 import { Inter, Roboto } from "next/font/google";
+import { useState } from "react";
 
 const roboto = Inter({
   subsets: ["latin"],
@@ -36,6 +37,17 @@ const rows = [
     action:"more"
   },
   {
+    id: 3,
+    ProductName: "Alice",
+    Category: 24,
+    UnitPrice: 100,
+    InStock: 10,
+    Discount: "20%",
+    Date: "12/09/2024",
+    TotalValue: 40,
+    action:"more"
+  },
+    {
     id: 4,
     ProductName: "Alice",
     Category: 24,
@@ -46,6 +58,96 @@ const rows = [
     TotalValue: 40,
     action:"more"
   },
+  {
+    id: 5,
+    ProductName: "Alice",
+    Category: 24,
+    UnitPrice: 100,
+    InStock: 10,
+    Discount: "20%",
+    Date: "12/09/2024",
+    TotalValue: 40,
+    action:"more"
+  },
+  {
+    id: 6,
+    ProductName: "Alice",
+    Category: 24,
+    UnitPrice: 100,
+    InStock: 10,
+    Discount: "20%",
+    Date: "12/09/2024",
+    TotalValue: 40,
+    action:"more"
+  },
+
+  {
+    id: 7,
+    ProductName: "Alice",
+    Category: 24,
+    UnitPrice: 100,
+    InStock: 10,
+    Discount: "20%",
+    Date: "12/09/2024",
+    TotalValue: 40,
+    action:"more"
+  },
+  {
+    id: 8,
+    ProductName: "Alice",
+    Category: 24,
+    UnitPrice: 100,
+    InStock: 10,
+    Discount: "20%",
+    Date: "12/09/2024",
+    TotalValue: 40,
+    action:"more"
+  },
+  {
+    id: 9,
+    ProductName: "Alice",
+    Category: 24,
+    UnitPrice: 100,
+    InStock: 10,
+    Discount: "20%",
+    Date: "12/09/2024",
+    TotalValue: 40,
+    action:"more"
+  },
+    {
+    id: 10,
+    ProductName: "Alice",
+    Category: 24,
+    UnitPrice: 100,
+    InStock: 10,
+    Discount: "20%",
+    Date: "12/09/2024",
+    TotalValue: 40,
+    action:"more"
+  },
+  {
+    id: 11,
+    ProductName: "Alice",
+    Category: 24,
+    UnitPrice: 100,
+    InStock: 10,
+    Discount: "20%",
+    Date: "12/09/2024",
+    TotalValue: 40,
+    action:"more"
+  },
+  {
+    id: 12,
+    ProductName: "Alice",
+    Category: 24,
+    UnitPrice: 100,
+    InStock: 10,
+    Discount: "20%",
+    Date: "12/09/2024",
+    TotalValue: 40,
+    action:"more"
+  },
+  
   
 ];
 
@@ -64,7 +166,10 @@ const columns = [
 
 
 
+
 const SalesPage = () =>{
+  const [isexpanded , setIsexpanded] = useState(false)
+  
     const myfilter = [
         {id:1,name:"Delete",icon:<Trash size={18} />},
         {id:2,name:"Export",icon:<DownloadCloud size={18} />},
@@ -75,7 +180,9 @@ const SalesPage = () =>{
         <>
         <NavBar />
         <SideBar />
-         <section className={`${roboto.className} px-2 sm:px-5 md:px-5 lg:px-20 transition-all duration-300 ml-20 z-40`}>
+         <section className={`
+            ${isexpanded ? "fixed w-full" : " relative z-30 sm:px-5   transition-all duration-300 ml-20"}
+          ${roboto.className}`}>
            <div className="space-y-3 sm:text-center md:text-left">
              <h1 className="text-2xl font-bold text-orange-600">Top Selling Items</h1>
               <p className="space-x-2 text-md"><span>Dashboard</span><span>/</span><span>Sales</span><span>/</span><span className="text-gray-400">List</span></p>
@@ -96,11 +203,12 @@ const SalesPage = () =>{
                  <DataGrid
                   rows={rows}
                   columns={columns}
-                  pageSize={5}
+                  hideFooter={true}
+                  
                   onRowClick={(params)=>{
                     navigation.push(`/inventory/sales/${params.id}`)
                   }}
-                  rowHeight={60}
+                  rowHeight={40}
                     sx={{
                          "& .MuiDataGrid-columnHeaders": {
                          backgroundColor: "#1976d2",
