@@ -42,13 +42,9 @@ const OrderDetails = () => {
     <>
      <TopNavBar />
       <SideBar />
-    <section className=" px-32">
+    <section className="">
 
-      <div className="flex w-full justify-between">
-        <div>
-
-
-        </div>
+      <div className="flex justify-between">
           <div>
             <h1 className="text-2xl font-bold text-orange-600">{productInfo.name}</h1>
             <p className="text-gray-800 font-semibold">Sold On <span className="text-gray-600">{productInfo.soldDate}</span></p>

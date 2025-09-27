@@ -1,174 +1,23 @@
 'use client'
-import { Button , TextField } from "@mui/material"
-import { DataGrid } from "@mui/x-data-grid";
+import { Button  } from "@mui/material"
 import { useRouter } from "next/navigation";
 import NavBar from '@/components/layouts/NavBar'
 import SideBar from "@/components/layouts/SideBar";
 import { Trash ,DownloadCloud } from "lucide-react";
-import { Inter, Roboto } from "next/font/google";
-import { useState } from "react";
+import TopCards from "./cards";
+import { Jost } from "next/font/google";
+import DataTable from "./table";
 
-const roboto = Inter({
+const jost = Jost({
+  weight: "400", 
   subsets: ["latin"],
-  weight: "400", // single weight
+  variable: "--font-jost",
 });
-
-const rows = [
-  {
-    id: 1,
-    ProductName: "Alice",
-    Category: 24,
-    UnitPrice: 100,
-    InStock: 10,
-    Discount: "20%",
-    Date: "12/09/2024",
-    TotalValue: 40,
-    action:"more"
-  },
-  {
-    id: 2,
-    ProductName: "Alice",
-    Category: 24,
-    UnitPrice: 100,
-    InStock: 10,
-    Discount: "20%",
-    Date: "12/09/2024",
-    TotalValue: 40,
-    action:"more"
-  },
-  {
-    id: 3,
-    ProductName: "Alice",
-    Category: 24,
-    UnitPrice: 100,
-    InStock: 10,
-    Discount: "20%",
-    Date: "12/09/2024",
-    TotalValue: 40,
-    action:"more"
-  },
-    {
-    id: 4,
-    ProductName: "Alice",
-    Category: 24,
-    UnitPrice: 100,
-    InStock: 10,
-    Discount: "20%",
-    Date: "12/09/2024",
-    TotalValue: 40,
-    action:"more"
-  },
-  {
-    id: 5,
-    ProductName: "Alice",
-    Category: 24,
-    UnitPrice: 100,
-    InStock: 10,
-    Discount: "20%",
-    Date: "12/09/2024",
-    TotalValue: 40,
-    action:"more"
-  },
-  {
-    id: 6,
-    ProductName: "Alice",
-    Category: 24,
-    UnitPrice: 100,
-    InStock: 10,
-    Discount: "20%",
-    Date: "12/09/2024",
-    TotalValue: 40,
-    action:"more"
-  },
-
-  {
-    id: 7,
-    ProductName: "Alice",
-    Category: 24,
-    UnitPrice: 100,
-    InStock: 10,
-    Discount: "20%",
-    Date: "12/09/2024",
-    TotalValue: 40,
-    action:"more"
-  },
-  {
-    id: 8,
-    ProductName: "Alice",
-    Category: 24,
-    UnitPrice: 100,
-    InStock: 10,
-    Discount: "20%",
-    Date: "12/09/2024",
-    TotalValue: 40,
-    action:"more"
-  },
-  {
-    id: 9,
-    ProductName: "Alice",
-    Category: 24,
-    UnitPrice: 100,
-    InStock: 10,
-    Discount: "20%",
-    Date: "12/09/2024",
-    TotalValue: 40,
-    action:"more"
-  },
-    {
-    id: 10,
-    ProductName: "Alice",
-    Category: 24,
-    UnitPrice: 100,
-    InStock: 10,
-    Discount: "20%",
-    Date: "12/09/2024",
-    TotalValue: 40,
-    action:"more"
-  },
-  {
-    id: 11,
-    ProductName: "Alice",
-    Category: 24,
-    UnitPrice: 100,
-    InStock: 10,
-    Discount: "20%",
-    Date: "12/09/2024",
-    TotalValue: 40,
-    action:"more"
-  },
-  {
-    id: 12,
-    ProductName: "Alice",
-    Category: 24,
-    UnitPrice: 100,
-    InStock: 10,
-    Discount: "20%",
-    Date: "12/09/2024",
-    TotalValue: 40,
-    action:"more"
-  },
-  
-  
-];
-
-const columns = [
-  { field: "id", headerName: "Sale", width: 70 },
-  { field: "ProductName", headerName: "Product Name", width: 130 },
-  { field: "Category", headerName: "Category", width: 90 },
-  { field: "UnitPrice", headerName: "Unit Price (FRW)", width: 200 },
-  { field: "InStock", headerName: "In Stock", width: 160 },
-  { field: "Discount", headerName: "Discount", width: 120 },
-  { field: "Date", headerName: "Date", width: 120 },
-  { field: "TotalValue", headerName: "Total Value", width: 120 },
-  { field: "action", headerName: "View", width: 10 },
-];
-
-
 
 
 
 const SalesPage = () =>{
-  const [isexpanded , setIsexpanded] = useState(false)
+ 
   
     const myfilter = [
         {id:1,name:"Delete",icon:<Trash size={18} />},
@@ -180,15 +29,16 @@ const SalesPage = () =>{
         <>
         <NavBar />
         <SideBar />
-         <section className={`
-            ${isexpanded ? "fixed w-full" : " relative z-30 sm:px-5   transition-all duration-300 ml-20"}
-          ${roboto.className}`}>
-           <div className="space-y-3 sm:text-center md:text-left">
-             <h1 className="text-2xl font-bold text-orange-600">Top Selling Items</h1>
-              <p className="space-x-2 text-md"><span>Dashboard</span><span>/</span><span>Sales</span><span>/</span><span className="text-gray-400">List</span></p>
+         <section className={`${jost.className}  items-center justify-center`}>
+           
+             <TopCards jostFont={jost} />
+           <div className="w-full pt-5 border-3 border-gray-300 shadow-lg shadow-gray-100 mt-10 rounded-3xl">
+
+              <div className="space-y-3 sm:text-center md:text-left">
+              <h1 className="text-2xl font-bold">Stock Status analysis</h1>
+              <p className="font-light text-md ">Overview of today’s inventory and stock levels per product</p>
            </div>
 
-           <div className="w-full  border border-gray-300 shadow-lg shadow-gray-100 mt-10 rounded-3xl">
             <div className="w-ful">
                <div className="border-b justify-end flex w-full  bg-amber-600">
                   <ul className="space-x-2">
@@ -199,35 +49,8 @@ const SalesPage = () =>{
                     }
                 </ul>
                </div>
-                
-                 <DataGrid
-                  rows={rows}
-                  columns={columns}
-                  hideFooter={true}
-                  
-                  onRowClick={(params)=>{
-                    navigation.push(`/inventory/sales/${params.id}`)
-                  }}
-                  rowHeight={40}
-                    sx={{
-                         "& .MuiDataGrid-columnHeaders": {
-                         backgroundColor: "#1976d2",
-                         color: "gray",
-                         fontSize: 16,
-                         fontWeight: "extrabold",
-                       },
-                       "& .MuiDataGrid-row:hover": {
-                         backgroundColor: "#f5f5f5",
-                         color:"black"
-                       },
-                       "& .MuiDataGrid-cell": {
-                         borderBottom: "1px solid #ddd",
-                       },
-                     }}
-                />
-                 
+                <DataTable />  
                 </div>
-
            </div>
          </section>
         </>
