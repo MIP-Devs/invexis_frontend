@@ -60,8 +60,8 @@ return (
        <div>
         <h1 className='text-md text-black font-bold py-4'>Buyer Details</h1>
         {buyerInfo.map((details,index)=>(
-            <div className='py-4 border-b border-gray-300 w-full' >
-                        <div key={index} className='flex w-1/3 justify-between'>
+            <div key={index} className='py-4 border-b border-gray-300 w-full' >
+                        <div  className='flex w-1/3 justify-between'>
                             <p className='text-md text-gray-600 font-semibold '>{details.label}</p>
                             <p className='text-md text-black font-semibold'>{details.value}</p>
                         </div>

@@ -1,4 +1,3 @@
-// filepath: d:\invexis\invexis_frontend\src\app\inventory\sales\table.jsx
 "use client";
 import { useRouter } from "next/navigation";
 import {
@@ -29,28 +28,27 @@ import {
   Button,
 } from "@mui/material";
 
-import ViewColumnIcon from "@mui/icons-material/ViewColumn";
 import FilterAltRoundedIcon from "@mui/icons-material/FilterAltRounded";
-import CloudDownloadRoundedIcon from "@mui/icons-material/CloudDownloadRounded";
-import SettingsIcon from "@mui/icons-material/Settings";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from '@mui/icons-material/Close';
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+import LocalOfferIcon from '@mui/icons-material/LocalOffer'; // Using this for 'Sale' icon
+import SettingsIcon from "@mui/icons-material/Settings";
 import { useState, useMemo, useEffect } from "react";
 
+// --- UPDATED SAMPLE DATA ---
 const rows = [
-  { id: 1, ProductName: "John Doe theBadman", Category: "Electronics", UnitPrice: 100, returned:"false", Discount: "20%", Date: "12/09/2024", TotalValue: 40, action: "more" },
-  { id: 2, ProductName: "Jane Smith", Category: "Electronics", UnitPrice: 450, returned:"false", Discount: "15%", Date: "10/09/2024", TotalValue: 9000, action: "more" },
-  { id: 3, ProductName: "Gaming Chair", Category: "Furniture", UnitPrice: 250, returned:"true", Discount: "5%", Date: "01/09/2024", TotalValue: 1250, action: "more" },
-  { id: 4, ProductName: "Shoes Nike Air", Category: "Fashion", UnitPrice: 75, returned:"true", Discount: "10%", Date: "18/08/2024", TotalValue: 3000, action: "more" },
-  { id: 5, ProductName: "Mouse Pad", Category: "Electronics", UnitPrice: 15, returned:"false", Discount: "5%", Date: "20/08/2024", TotalValue: 750, action: "more" },
-  { id: 6, ProductName: "Office Desk", Category: "Furniture", UnitPrice: 300, returned:"false", Discount: "0%", Date: "25/08/2024", TotalValue: 3000, action: "more" },
+  { id: 1, ProductId: "PROD001", ProductName: "Gaming Laptop X", Category: "Electronics", Quantity: 15, Price: 1200, action: "more" },
+  { id: 2, ProductId: "PROD002", ProductName: "Office Chair Pro", Category: "Furniture", Quantity: 50, Price: 250, action: "more" },
+  { id: 3, ProductId: "PROD003", ProductName: "Cotton T-shirt", Category: "Apparel", Quantity: 200, Price: 25, action: "more" },
+  { id: 4, ProductId: "PROD004", ProductName: "4K Monitor 32'", Category: "Electronics", Quantity: 8, Price: 450, action: "more" },
+  { id: 5, ProductId: "PROD005", ProductName: "Desk Lamp LED", Category: "Home Goods", Quantity: 110, Price: 40, action: "more" },
+  { id: 6, ProductId: "PROD006", ProductName: "Running Shoes", Category: "Apparel", Quantity: 75, Price: 85, action: "more" },
 ];
+// ----------------------------
 
-// Small local confirmation dialog to avoid external prop mismatches
+// Small local confirmation dialog (Kept but not used in the new RowActionsMenu)
 const ConfirmDialog = ({ open, title, message, onConfirm, onCancel }) => (
   <Dialog open={open} onClose={onCancel}>
     <DialogTitle>{title || "Confirm"}</DialogTitle>
@@ -65,8 +63,8 @@ const ConfirmDialog = ({ open, title, message, onConfirm, onCancel }) => (
 );
 
 // Custom Component for the Action Menu (RowActionsMenu)
-// onDeleteRequest should be a curried function: (id) => (open:boolean) => void
-const RowActionsMenu = ({ rowId, onRedirect, onDeleteRequest }) => {
+// Modified to only show 'Sale' and 'View'
+const RowActionsMenu = ({ rowId, onRedirect, onSale }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -79,25 +77,19 @@ const RowActionsMenu = ({ rowId, onRedirect, onDeleteRequest }) => {
     setAnchorEl(null);
   };
 
+  // 'View' action - kept original logic
   const handleView = (event) => {
     event.stopPropagation();
-    onRedirect(rowId);
+    navigate.push(`/inventory/sales/`);
     handleClose();
   };
 
   const navigate = useRouter();
-  const handleEdit = (event) => {
+  // 'Sale' action - Maps to the original 'Edit' route
+  const handleSale = (event) => {
     event.stopPropagation();
-    navigate.push(`/inventory/sales/${rowId}/${rowId}`);
+    navigate.push(`/inventory/sales/sellProduct/sale/${rowId}`)
     handleClose();
-  };
-
-  const handleDelete = (event) => {
-    event.stopPropagation();
-    handleClose();
-    if (typeof onDeleteRequest === "function") {
-      onDeleteRequest(rowId)(true); // open modal for this id
-    }
   };
 
   return (
@@ -138,17 +130,15 @@ const RowActionsMenu = ({ rowId, onRedirect, onDeleteRequest }) => {
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
       >
+        {/* Sale Button */}
+        <MenuItem onClick={handleSale}>
+          <ListItemIcon><LocalOfferIcon sx={{ color: "#333" }} /></ListItemIcon>
+          <ListItemText primary="Sale" />
+        </MenuItem>
+        {/* View Button */}
         <MenuItem onClick={handleView}>
           <ListItemIcon><VisibilityIcon sx={{ color: "#333" }} /></ListItemIcon>
           <ListItemText primary="View" />
-        </MenuItem>
-        <MenuItem onClick={handleEdit}>
-          <ListItemIcon><EditIcon sx={{ color: "#333" }} /></ListItemIcon>
-          <ListItemText primary="Edit" />
-        </MenuItem>
-        <MenuItem onClick={handleDelete} sx={{ color: "error.main" }}>
-          <ListItemIcon><DeleteIcon sx={{ color: "error.main" }} /></ListItemIcon>
-          <ListItemText primary="Delete" />
         </MenuItem>
       </Menu>
     </>
@@ -164,7 +154,10 @@ const FilterPopover = ({ anchorEl, onClose, onFilterChange, currentFilter }) => 
   const [filterCriteria, setFilterCriteria] = useState(currentFilter);
 
   useEffect(() => {
-    setFilterCriteria(currentFilter);
+    // Only update if the prop changes to prevent local state overwrite during local changes
+    if (JSON.stringify(currentFilter) !== JSON.stringify(filterCriteria)) {
+      setFilterCriteria(currentFilter);
+    }
   }, [currentFilter]);
 
   const uniqueCategories = useMemo(() => {
@@ -174,7 +167,7 @@ const FilterPopover = ({ anchorEl, onClose, onFilterChange, currentFilter }) => 
 
   const availableColumns = [
     { label: 'Category', value: 'Category', type: 'text' },
-    { label: 'Unit Price (FRW)', value: 'UnitPrice', type: 'number' },
+    { label: 'Price (FRW)', value: 'Price', type: 'number' },
   ];
 
   const getOperators = (columnType) => {
@@ -197,6 +190,7 @@ const FilterPopover = ({ anchorEl, onClose, onFilterChange, currentFilter }) => 
 
     if (name === 'column') {
       const newColumnType = availableColumns.find(col => col.value === value)?.type || 'text';
+      // Reset operator and value when changing column type
       newCriteria = {
         ...newCriteria,
         operator: getOperators(newColumnType)[0].value,
@@ -217,6 +211,7 @@ const FilterPopover = ({ anchorEl, onClose, onFilterChange, currentFilter }) => 
   };
 
   const handleClearFilter = () => {
+    // Reset to default Category filter, as Category is a good default for text
     const defaultFilter = { column: 'Category', operator: 'contains', value: '' };
     onFilterChange(defaultFilter);
     setFilterCriteria(defaultFilter);
@@ -228,6 +223,7 @@ const FilterPopover = ({ anchorEl, onClose, onFilterChange, currentFilter }) => 
   )?.type || 'text';
 
   return (
+    <>
     <Popover
       open={open}
       anchorEl={anchorEl}
@@ -250,9 +246,10 @@ const FilterPopover = ({ anchorEl, onClose, onFilterChange, currentFilter }) => 
         }
       }}
     >
-      <IconButton onClick={handleClearFilter} size="small" sx={{ position: 'absolute', top: 8, left: 8 }}>
+      <IconButton onClick={handleClearFilter} size="small" sx={{ position: 'absolute', top: 8, right: 8, left: 'auto' }}>
         <CloseIcon />
       </IconButton>
+      <Typography variant="subtitle1" sx={{ mt: 3, fontWeight: 'bold' }}>Filter By:</Typography>
 
       <FormControl variant="outlined" size="small" sx={{ minWidth: 150, mt: 3 }}>
         <InputLabel>Columns</InputLabel>
@@ -263,7 +260,7 @@ const FilterPopover = ({ anchorEl, onClose, onFilterChange, currentFilter }) => 
           onChange={handleSelectChange}
         >
           {availableColumns.map(col => (
-             <MenuItem key={col.value} value={col.value}>{col.label}</MenuItem>
+            <MenuItem key={col.value} value={col.value}>{col.label}</MenuItem>
           ))}
         </Select>
       </FormControl>
@@ -285,30 +282,31 @@ const FilterPopover = ({ anchorEl, onClose, onFilterChange, currentFilter }) => 
       <FormControl variant="outlined" size="small" sx={{ flexGrow: 1, minWidth: 160, mt: 3 }}>
         <InputLabel>{selectedColumnType === 'number' ? 'Filter amount' : 'Filter value'}</InputLabel>
         {selectedColumnType === 'number' ? (
-            <TextField
-                size="small"
-                variant="outlined"
-                name="value"
-                value={filterCriteria.value}
-                onChange={handleValueChange}
-                type="number"
-                InputLabelProps={{ shrink: true }}
-                label="Filter amount"
-            />
+          <TextField
+            size="small"
+            variant="outlined"
+            name="value"
+            value={filterCriteria.value}
+            onChange={handleValueChange}
+            type="number"
+            InputLabelProps={{ shrink: true }}
+            label="Filter amount"
+          />
         ) : (
-            <Select
-                label="Filter value"
-                name="value"
-                value={filterCriteria.value}
-                onChange={handleValueChange}
-            >
-                {uniqueCategories.map(cat => (
-                    <MenuItem key={cat} value={cat}>{cat || "All Categories"}</MenuItem>
-                ))}
-            </Select>
+          <Select
+            label="Filter value"
+            name="value"
+            value={filterCriteria.value}
+            onChange={handleValueChange}
+          >
+            {uniqueCategories.map(cat => (
+              <MenuItem key={cat} value={cat}>{cat || "All Categories"}</MenuItem>
+            ))}
+          </Select>
         )}
       </FormControl>
     </Popover>
+    </>
   );
 };
 
@@ -316,38 +314,26 @@ const FilterPopover = ({ anchorEl, onClose, onFilterChange, currentFilter }) => 
 // Main DataTable Component
 // ----------------------------------------------------------------------
 
-const DataTable = () => {
+const CurrentInventory = () => {
   const navigation = useRouter();
   const [search, setSearch] = useState("");
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
 
   const [activeFilter, setActiveFilter] = useState({
-    column: 'UnitPrice',
-    operator: '>',
+    column: 'Category', // Default filter column
+    operator: 'contains',
     value: '',
   });
 
-  // Delete modal state owned by DataTable
+  // Delete modal state and logic (Kept for structure, not used by current menu)
   const [deleteModal, setDeleteModal] = useState({ open: false, id: null });
+  const toggleDeleteModalFor = (id) => (open) => { setDeleteModal({ open: Boolean(open), id: open ? id : null }); };
+  const handleConfirmDelete = () => { console.log("Confirmed delete for id:", deleteModal.id); setDeleteModal({ open: false, id: null }); };
+  const handleCancelDelete = () => { setDeleteModal({ open: false, id: null }); };
 
-  // Curried toggler: (id) => (open) => void
-  const toggleDeleteModalFor = (id) => (open) => {
-    setDeleteModal({ open: Boolean(open), id: open ? id : null });
-  };
-
-  const handleConfirmDelete = () => {
-    // replace with actual delete logic (API call / state update)
-    console.log("Confirmed delete for id:", deleteModal.id);
-    // close afterwards
-    setDeleteModal({ open: false, id: null });
-  };
-
-  const handleCancelDelete = () => {
-    setDeleteModal({ open: false, id: null });
-  };
 
   const handleRedirectToSlug = (id) => {
-    navigation.push(`/inventory/sales/${id}`);
+    navigation.push(`/inventory/products/${id}`); // Adjusted to product view
   };
 
   const handleOpenFilter = (event) => {
@@ -365,21 +351,24 @@ const DataTable = () => {
   const filteredRows = useMemo(() => {
     let currentRows = rows;
 
+    // Search on Product Name or ID
     if (search) {
+      const lowerCaseSearch = search.toLowerCase();
       currentRows = currentRows.filter((row) =>
-        row.ProductName.toLowerCase().includes(search.toLowerCase())
+        row.ProductName.toLowerCase().includes(lowerCaseSearch) ||
+        row.ProductId.toLowerCase().includes(lowerCaseSearch)
       );
     }
 
     const { column, operator, value } = activeFilter;
 
     if (column && value) {
-      if (column === 'UnitPrice') {
+      if (column === 'Price') {
         const numValue = Number(value);
         if (isNaN(numValue)) return currentRows;
 
         currentRows = currentRows.filter((row) => {
-          const rowPrice = row.UnitPrice;
+          const rowPrice = row.Price;
           if (operator === '>') return rowPrice > numValue;
           if (operator === '<') return rowPrice < numValue;
           if (operator === '==') return rowPrice === numValue;
@@ -402,6 +391,8 @@ const DataTable = () => {
   }, [search, activeFilter]);
 
   return (
+    <>
+    <section>
     <Paper sx={{ width: "100%", overflowY: "auto", boxShadow: "none", background: "transparent" }}>
       <FilterPopover
         anchorEl={filterAnchorEl}
@@ -426,15 +417,16 @@ const DataTable = () => {
         }}
       >
         <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-          Stock-Out History
+          Inventory Stock
         </Typography>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
+          {/* Search */}
           <TextField
             size="small"
             variant="outlined"
-            placeholder="Search…"
-            sx={{border:"2px orange solid",borderRadius:2}}
+            placeholder="Search ID or Name…"
+            sx={{ border: "2px orange solid", borderRadius: 2 }}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             InputProps={{
@@ -442,22 +434,25 @@ const DataTable = () => {
             }}
           />
 
-          <IconButton onClick={handleOpenFilter} variant="contained"  >
+          {/* Filter */}
+          <IconButton onClick={handleOpenFilter} variant="contained"  >
             <FilterAltRoundedIcon
-                sx={{
-                    borderRadius:"6px",
-                    height:"30px",
-                    padding:"2px",
-                    color: activeFilter.value ? 'black' : 'black',
-                    filter: activeFilter.value ? 'drop-shadow(0 0 4px rgba(0, 123, 255, 0.4))' : 'none'}}
+              sx={{
+                borderRadius: "6px",
+                height: "30px",
+                padding: "2px",
+                color: activeFilter.value ? 'black' : 'black',
+                filter: activeFilter.value ? 'drop-shadow(0 0 4px rgba(0, 123, 255, 0.4))' : 'none'
+              }}
             />
             <small className="font-bold text-black text-sm ">Filter</small>
           </IconButton>
 
-          <IconButton sx={{bgcolor:"none"}} className="space-x-3"  >
-            <CloudDownloadRoundedIcon
-            sx={{ padding:"2px", color: "black" }}  />
-            <small className="font-bold text-black text-sm ">Export</small>
+          {/* Designs/Settings button */}
+          <IconButton sx={{ bgcolor: "none" }} className="space-x-3" >
+            <SettingsIcon
+              sx={{ padding: "2px", color: "black" }} />
+            <small className="font-bold text-black text-sm ">Designs</small>
           </IconButton>
         </Box>
       </Toolbar>
@@ -466,14 +461,11 @@ const DataTable = () => {
         <Table stickyHeader>
           <TableHead>
             <TableRow sx={{ backgroundColor: "#1976d2" }}>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Sale</TableCell>
+              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Product Id</TableCell>
               <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Product Name</TableCell>
               <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Category</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Unit Price (FRW)</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Returned</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Discount</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Date</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Total Value</TableCell>
+              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Quantity in Stock</TableCell>
+              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Price (FRW)</TableCell>
               <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -488,19 +480,15 @@ const DataTable = () => {
                   "&:hover": { backgroundColor: "#f5f5f5" },
                 }}
               >
-                <TableCell>{row.id}</TableCell>
+                <TableCell>{row.ProductId}</TableCell>
                 <TableCell>{row.ProductName}</TableCell>
                 <TableCell>{row.Category}</TableCell>
-                <TableCell>{row.UnitPrice}</TableCell>
-                <TableCell>{row.returned=="false" ? <span className='text-green-500'>false</span> : <span className='text-red-500'>true</span>}</TableCell>
-                <TableCell>{row.Discount}</TableCell>
-                <TableCell>{row.Date}</TableCell>
-                <TableCell>{row.TotalValue}</TableCell>
+                <TableCell>{row.Quantity}</TableCell>
+                <TableCell>{row.Price}</TableCell>
                 <TableCell>
                   <RowActionsMenu
                     rowId={row.id}
                     onRedirect={handleRedirectToSlug}
-                    onDeleteRequest={toggleDeleteModalFor}
                   />
                 </TableCell>
               </TableRow>
@@ -509,6 +497,12 @@ const DataTable = () => {
         </Table>
       </TableContainer>
     </Paper>
+    </section>
+    </>
   );
 };
-export default DataTable;
+export default CurrentInventory;
+
+
+
+
