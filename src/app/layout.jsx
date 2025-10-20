@@ -4,6 +4,7 @@ import ClientProviders from "./ClientProviders";
 export const metadata = {
   title: "Invexis",
   description: "An Inventory Management System",
+
 };
 
 export default function RootLayout({ children }){
