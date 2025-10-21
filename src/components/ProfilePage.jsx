@@ -92,7 +92,7 @@ export default function ProfilePage() {
           </p>
 
           <div className="mt-4 flex justify-center gap-4">
-            <Link href="/users/edit-profile">
+            <Link href="/account/edit-profile">
               <button className="px-4 py-2 bg-[#081422] text-white rounded-lg hover:bg-[#0f2239]">
                 Edit Profile
               </button>
