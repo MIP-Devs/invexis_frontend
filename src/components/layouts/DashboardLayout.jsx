@@ -9,8 +9,8 @@ export default function DashboardLayout({ children }) {
 
   return (
     <div className="">
-          <SideBar expanded={expanded} setExpanded={setExpanded} />
-          <TopNavBar expanded={expanded} />
+      <SideBar expanded={expanded} setExpanded={setExpanded} />
+      <TopNavBar expanded={expanded} />
 
       {/* Main Content */}
       <main

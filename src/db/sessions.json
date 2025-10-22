@@ -182,5 +182,37 @@
     "ip": "127.0.0.1",
     "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
     "country": "Rwanda"
+  },
+  {
+    "id": "s24",
+    "user_id": "u1",
+    "start_time": "2025-10-22T01:30:22.125Z",
+    "ip": "127.0.0.1",
+    "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+    "country": "Rwanda"
+  },
+  {
+    "id": "s25",
+    "user_id": "u1",
+    "start_time": "2025-10-22T01:52:01.020Z",
+    "ip": "127.0.0.1",
+    "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+    "country": "Rwanda"
+  },
+  {
+    "id": "s26",
+    "user_id": "u1",
+    "start_time": "2025-10-22T01:53:01.135Z",
+    "ip": "127.0.0.1",
+    "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+    "country": "Rwanda"
+  },
+  {
+    "id": "s27",
+    "user_id": "u1",
+    "start_time": "2025-10-22T08:55:08.539Z",
+    "ip": "127.0.0.1",
+    "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+    "country": "Rwanda"
   }
 ]

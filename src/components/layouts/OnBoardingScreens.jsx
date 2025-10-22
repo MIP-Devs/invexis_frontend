@@ -65,7 +65,7 @@ export default function OnBoardingScreens({ steps }) {
       </button>
 
       {/* Left Side - Image */}
-      <div className="w-full md:w-1/2 h-1/2 md:h-full flex items-center justify-center bg-gray-50">
+      <div className="w-full md:w-1/2 h-1/2 md:h-full flex items-center justify-center bg-orange-100">
         {steps[activeStep]?.image && (
           <Image
             src={steps[activeStep].image}
@@ -115,7 +115,7 @@ export default function OnBoardingScreens({ steps }) {
                 <span
                   key={i}
                   className={`w-[4px] md:w-10 h-[4px] rounded-full ${
-                    i === activeStep ? "bg-blue-600" : "bg-gray-300"
+                    i === activeStep ? "bg-orange-600" : "bg-gray-300"
                   }`}
                 ></span>
               ))}
@@ -124,7 +124,7 @@ export default function OnBoardingScreens({ steps }) {
             <button
               onClick={handleNext}
               disabled={activeStep === steps.length - 1}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg disabled:opacity-50"
+              className="flex items-center px-4 py-2 bg-[#081422] text-white rounded-lg disabled:opacity-50"
             >
               Next <HiArrowRight className="ml-1" />
             </button>

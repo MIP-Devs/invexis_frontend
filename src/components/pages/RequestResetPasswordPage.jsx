@@ -6,14 +6,53 @@ import { HiChevronLeft, HiArrowRight, HiCog } from "react-icons/hi";
 import FormWrapper from "../shared/FormWrapper";
 import Link from "next/link";
 import { IconButton } from "@mui/material";
+import { useRouter } from "next/navigation";
 
-const ResetPasswordForm = () => {
+const RequestResetPasswordPage = () => {
+  const router = useRouter();
   const [email, setEmail] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const handleSubmit = (e) => {
+  //   const handleSubmit = async (e) => {
+  //     e.preventDefault();
+  //     setSubmitting(true);
+  //     setError("");
+  //     setSuccess("");
+
+  //     try {
+  //       // POST /password/reset
+  //       await fetch("/api/auth/password/reset", {
+  //         method: "POST",
+  //         body: JSON.stringify({ email }),
+  //         headers: { "Content-Type": "application/json" },
+  //       });
+  //       setSuccess("Password reset link sent!");
+  //     } catch (err) {
+  //       setError(err.message || "Failed to send reset link");
+  //     } finally {
+  //       setSubmitting(false);
+  //     }
+  //   };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Email:", email);
+    setSubmitting(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      setEmail(email);
+      setSuccess("Request sent successfully! Please check your email.");
+      router.push("/auth/reset-password/reset");
+    } catch (err) {
+      setError(err.message || "Failed to send reset link");
+    } finally {
+      setSubmitting(false);
+    }
   };
+
 
   return (
     <div className="w-screen h-screen flex text-sm flex-col md:flex-row bg-white">
@@ -32,9 +71,9 @@ const ResetPasswordForm = () => {
         <FormWrapper
           title="Reset Password"
           desc="Please enter the email address associated with your account and we'll email you a link to reset your password."
-          onSubmit={handleSubmit}
-          submitLabel="Send Request"
+          submitLabel={submitting ? "Sending..." : "Send Link"}
           submitIcon={<HiArrowRight />}
+          onSubmit={handleSubmit}
           fields={[
             {
               label: "Email",
@@ -52,10 +91,12 @@ const ResetPasswordForm = () => {
               label: "Return to Login",
             },
           ]}
+          error={error}
+          success={success}
         />
       </div>
     </div>
   );
 };
 
-export default ResetPasswordForm;
+export default RequestResetPasswordPage;

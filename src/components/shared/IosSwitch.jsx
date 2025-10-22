@@ -7,6 +7,10 @@ const IOSSwitch = styled((props) => (
   width: 42,
   height: 27,
   padding: 0,
+  display: "inline-flex",
+  alignItems: "center",
+  gap: "14px", // <--- spacing between switch and label
+
   "& .MuiSwitch-switchBase": {
     padding: 0,
     margin: 2,
@@ -15,7 +19,7 @@ const IOSSwitch = styled((props) => (
       transform: "translateX(16px)",
       color: "#fff",
       "& + .MuiSwitch-track": {
-        backgroundColor: "#ff782d", // your custom primary color
+        backgroundColor: "#ff782d", // custom primary color
         opacity: 1,
         border: 0,
       },

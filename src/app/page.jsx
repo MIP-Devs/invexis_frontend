@@ -6,6 +6,10 @@ import Lottie from "lottie-react";
 import { motion } from "framer-motion";
 import heroAnimation from "../../public/animations/Hero";
 
+const metadata = {
+  title: "Home",
+};
+
 export default function Navbar() {
   return (
     <div className="p-2 bg-white">
@@ -15,18 +19,26 @@ export default function Navbar() {
             {/* Logo */}
             <div className="flex items-center">
               <span className="text-2xl font-extrabold">
-                INVEX <span className="text-orange-500">Is</span>
+                INVEX<span className="text-orange-500">iS</span>
               </span>
             </div>
 
             {/* Right-side actions */}
             <div className="flex items-center gap-8">
-              <a
-                href="#"
-                className="text-sm text-gray-800 hover:text-orange-500 transition hidden md:inline-block"
-              >
-                Login / Register
-              </a>
+              <span className="flex items-center justify-center">
+                <Link
+                  href="/auth/login"
+                  className="text-sm text-gray-800 px-4 py-1 hover:text-orange-500 transition hidden md:inline-block border-r border-black"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="#"
+                  className="text-sm text-gray-800 px-4 hover:text-orange-500 transition hidden md:inline-block"
+                >
+                  Register
+                </Link>
+              </span>
               <button
                 aria-label="Search"
                 className="w-10 h-10 rounded-full border border-orange-400 text-orange-500 flex items-center justify-center hover:bg-orange-500 hover:text-white transition"
@@ -74,7 +86,7 @@ export default function Navbar() {
       {/* Hero Section */}
       <section className="flex flex-col-reverse md:flex-row items-center justify-between flex-1 px-6 py-10 md:px-12 lg:px-20 bg-orange-100">
         <motion.div
-          className="max-w-lg space-y-6 md:mr-6" 
+          className="max-w-lg space-y-6 md:mr-6"
           initial={{ opacity: 0, x: -60 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, ease: "easeOut" }}
@@ -87,17 +99,19 @@ export default function Navbar() {
             Boost efficiency, save time & money with this stock management
             system.
           </p>
-          <motion.button
-            className="px-6 py-3 border border-orange-500 text-orange-500 rounded-lg hover:bg-orange-500 hover:text-white transition font-semibold"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Get started
-          </motion.button>
+          <Link href="/welcome">
+            <motion.button
+              className="px-6 py-3 border border-orange-500 text-orange-500 rounded-lg hover:bg-orange-500 hover:text-white transition font-semibold"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Get started
+            </motion.button>
+          </Link>
         </motion.div>
 
         <motion.div
-          className="flex justify-center md:justify-end w-full md:w-[40%] mb-8 md:mb-0" 
+          className="flex justify-center md:justify-end w-full md:w-[40%] mb-8 md:mb-0"
           initial={{ opacity: 0, x: 60 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
@@ -105,7 +119,7 @@ export default function Navbar() {
           <Lottie
             animationData={heroAnimation}
             loop={true}
-            className="w-[100%] max-w-md" 
+            className="w-[100%] max-w-md"
           />
         </motion.div>
       </section>

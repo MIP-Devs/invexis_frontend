@@ -74,10 +74,10 @@ export default function TopNavBar({ expanded = true }) {
             <input
               type="text"
               placeholder="Search"
-              className="pl-8 pr-3 py-2 rounded bg-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 transition w-36 md:w-48 lg:w-64"
+              className="pl-8 pr-3 py-4 rounded-xl px-8 bg-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-orange-200 transition w-36 md:w-48 lg:w-64"
               aria-label="Search"
             />
-            <Search className="absolute left-2 top-2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-4 top-4 w-4 h-4 text-gray-400" />
           </div>
 
           {/* Notifications */}

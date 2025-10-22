@@ -30,7 +30,7 @@ const navItems = [
     title: "Workers",
     icon: <Users size={22} />,
     children: [
-      { title: "List", path: "/inventory/users/list" },
+      { title: "List", path: "/inventory/workers/list" },
       { title: "Profile", path: "/inventory/users/profile" }
     ],
   },
@@ -137,7 +137,7 @@ export default function SideBar({ expanded: controlledExpanded, setExpanded: set
       <aside
         className={`${
           expanded ? "w-64" : "w-16"
-        } h-screen bg-[#081422] border-r flex flex-col fixed top-0 left-0 overflow-y-auto overflow-x-hidden transition-[width] duration-400 ease-in-out scrollbar-thin scrollbar-thumb-gray-300 z-30`}
+        } h-screen bg-white border-r flex flex-col fixed top-0 left-0 overflow-y-auto transition-[width] duration-400 ease-in-out scrollbar-thin scrollbar-thumb-gray-300 z-30`}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-4 border-b">
@@ -157,7 +157,7 @@ export default function SideBar({ expanded: controlledExpanded, setExpanded: set
               }`}
             >
               <span className="font-bold text-lg text-gray-950 select-none whitespace-nowrap">
-                Invex<span className="text-orange-500 font-extrabold">Is</span>
+                INVEX<span className="text-orange-500 font-extrabold">iS</span>
               </span>
             </div>
           </div>

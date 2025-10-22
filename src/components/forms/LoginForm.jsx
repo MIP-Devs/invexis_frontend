@@ -4,46 +4,69 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import Image from "next/image";
 import Link from "next/link";
-import { IconButton, InputAdornment, CircularProgress } from "@mui/material";
+import {
+  IconButton,
+  InputAdornment,
+  CircularProgress,
+} from "@mui/material";
 import { HiEye, HiEyeOff, HiArrowRight } from "react-icons/hi";
 import FormWrapper from "../shared/FormWrapper";
 import { loginUser } from "@/store/authActions";
 import { useRouter } from "next/navigation";
+import TermsAndPrivacyPopup from "@/components/layouts/TermsAndPrivacyPopup";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const [email, setEmail] = useState("");
+  const [identifier, setIdentifier] = useState(""); 
   const [password, setPassword] = useState("");
+  const [acceptTerms, setAcceptTerms] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(true); // default true until we check token
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [showTermsPopup, setShowTermsPopup] = useState(false);
 
-  // 🚀 Check localStorage for token before rendering form
+  // Show popup before allowing checkbox tick
+  const handleTermsClick = () => {
+    if (!acceptTerms) setShowTermsPopup(true);
+    else setAcceptTerms(false); // untick if already checked
+  };
+
+  const handleAgree = () => {
+    setAcceptTerms(true);
+    setShowTermsPopup(false);
+  };
+
+  const handleClosePopup = () => setShowTermsPopup(false);
+
   useEffect(() => {
     const token = localStorage.getItem("auth")
       ? JSON.parse(localStorage.getItem("auth"))?.token
       : null;
 
-    if (token) {
-      router.replace("/inventory"); // redirect logged-in users
-    } else {
-      setLoading(false); // no token, show login form
-    }
+    if (token) router.replace("/inventory");
+    else setLoading(false);
   }, [router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
 
+    if (!acceptTerms) {
+      setError("You must accept the Terms & Privacy Policy to continue.");
+      return;
+    }
+
+    setSubmitting(true);
     try {
-      await dispatch(loginUser(email, password));
+      await dispatch(loginUser(identifier, password));
       router.push("/inventory");
     } catch (err) {
       setError(err.message || "Login failed");
-      setLoading(false);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -56,15 +79,15 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="w-screen h-screen flex text-sm flex-col md:flex-row bg-white">
+    <div className="w-screen h-screen flex text-sm flex-col md:flex-row bg-white dark:bg-zinc-950">
       {/* Left Side - Image */}
-      <div className="w-full md:w-1/2 h-1/2 md:h-full flex items-center justify-center bg-gray-50 relative">
+      <div className="w-full md:w-1/2 h-1/2 md:h-full flex items-center justify-center bg-orange-100 relative">
         <Image
-          src="/images/6.png"
+          src="/images/8.png"
           alt="Login Illustration"
           width={600}
           height={600}
-          className="object-contain hidden md:block md:max-h-[90%] px-4"
+          className="object-contain hidden md:block md:max-h-[40%] px-4"
           priority
         />
       </div>
@@ -72,16 +95,26 @@ const LoginPage = () => {
       {/* Right Side - Login Form */}
       <div className="w-full md:w-1/2 h-1/2 md:h-full flex flex-col justify-center items-center p-6 md:p-10">
         <FormWrapper
-          title="Sign In"
+          title="Welcome Back 👋"
+          desc="Sign in with your account credentials"
           onSubmit={handleSubmit}
-          submitLabel={loading ? "Signing In..." : "Sign In"}
+          submitLabel={submitting ? "Signing In..." : "Sign In"}
           submitIcon={<HiArrowRight />}
+          isLoading={submitting}
+          error={error}
+          oauthOptions={["google", "apple", "phone", "otp"]}
+          extraLinks={[
+            { href: "/signup", label: "Don't have an account? Sign Up" },
+          ]}
+          showTerms={true}
+          acceptedTerms={acceptTerms}
+          onAcceptTerms={handleTermsClick} // trigger popup here
           fields={[
             {
-              label: "Email Address",
-              type: "email",
-              value: email,
-              onChange: (e) => setEmail(e.target.value),
+              label: "Email or Username",
+              type: "text",
+              value: identifier,
+              onChange: (e) => setIdentifier(e.target.value),
               required: true,
             },
             {
@@ -91,9 +124,9 @@ const LoginPage = () => {
               onChange: (e) => setPassword(e.target.value),
               required: true,
               before: (
-                <div className="flex justify-end -mb-4">
+                <div className="flex justify-end -mb-2">
                   <Link
-                    href="/auth/forgot-password"
+                    href="/auth/reset-password/request"
                     className="text-sm text-blue-600 hover:underline font-metropolis"
                   >
                     Forgot your password?
@@ -114,17 +147,15 @@ const LoginPage = () => {
               },
             },
           ]}
-          oauthOptions={["google", "apple"]}
-          extraLinks={[
-            {
-              href: "/signup",
-              label: "Don't have an account? Sign Up",
-            },
-          ]}
         />
-
-        {error && <p className="text-red-600 mt-4 font-medium">{error}</p>}
       </div>
+
+      {/* Terms & Privacy Popup */}
+      <TermsAndPrivacyPopup
+        open={showTermsPopup}
+        onAgree={handleAgree}
+        onClose={handleClosePopup}
+      />
     </div>
   );
 };
