@@ -16,8 +16,6 @@ import {
   BarChart3,
 } from "lucide-react";
 import {
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   Tooltip,
@@ -25,6 +23,8 @@ import {
   CartesianGrid,
   PieChart,
   Pie,
+  Area,
+  AreaChart,
   Cell,
 } from "recharts";
 import { motion } from "framer-motion";
@@ -33,16 +33,34 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
 
-/* ──────────────── SAMPLE DATA ──────────────── */
-const salesData = [
-  { name: "01 Jan", sales: 3000 },
-  { name: "05 Jan", sales: 4000 },
-  { name: "10 Jan", sales: 6000 },
-  { name: "15 Jan", sales: 2000 },
-  { name: "20 Jan", sales: 5000 },
-  { name: "25 Jan", sales: 4500 },
-  { name: "31 Jan", sales: 5500 },
-];
+/* ───────────────── SAMPLE DATA & CHART SETS ───────────────── */
+const chartDataSets = {
+  weekly: [
+    { name: "Mon", orders: 50, inHand: 30 },
+    { name: "Tue", orders: 65, inHand: 55 },
+    { name: "Wed", orders: 45, inHand: 35 },
+    { name: "Thu", orders: 80, inHand: 60 },
+    { name: "Fri", orders: 60, inHand: 50 },
+    { name: "Sat", orders: 90, inHand: 70 },
+    { name: "Sun", orders: 55, inHand: 40 },
+  ],
+  monthly: [
+    { name: "Jan", orders: 70, inHand: 50 },
+    { name: "Feb", orders: 40, inHand: 60 },
+    { name: "Mar", orders: 80, inHand: 55 },
+    { name: "Apr", orders: 55, inHand: 35 },
+    { name: "May", orders: 85, inHand: 75 },
+    { name: "Jun", orders: 45, inHand: 50 },
+  ],
+  yearly: [
+    { name: "Jan", orders: 92, inHand: 30 },
+    { name: "Feb", orders: 22, inHand: 70 },
+    { name: "Mar", orders: 86, inHand: 60 },
+    { name: "Apr", orders: 55, inHand: 35 },
+    { name: "May", orders: 78, inHand: 45 },
+    { name: "Jun", orders: 42, inHand: 38 },
+  ],
+};
 
 const baseCategoryData = [
   { name: "Footwear", value: 40, color: "#6366f1" },
@@ -50,53 +68,122 @@ const baseCategoryData = [
   { name: "Fashion", value: 25, color: "#10b981" },
 ];
 
+const smoothSalesData = [
+  { month: "Jan", orders: 95, inHand: 35 },
+  { month: "Feb", orders: 20, inHand: 65 },
+  { month: "Mar", orders: 80, inHand: 75 },
+  { month: "Apr", orders: 60, inHand: 45 },
+  { month: "May", orders: 85, inHand: 70 },
+  { month: "Jun", orders: 50, inHand: 40 },
+];
+
 const baseActivities = [
-  { id: 1, category: "Footwear", action: "Added 200 Units of Nike Air Max", time: "2h ago" },
-  { id: 2, category: "Electronics", action: "Updated Product Prices", time: "Yesterday" },
-  { id: 3, category: "Electronics", action: "Low stock warning: Bluetooth Speaker", time: "2 days ago" },
-  { id: 4, category: "Fashion", action: "New seasonal handbags uploaded", time: "3 days ago" },
+  {
+    id: 1,
+    category: "Footwear",
+    action: "Added 200 Units of Nike Air Max",
+    time: "2h ago",
+  },
+  {
+    id: 2,
+    category: "Electronics",
+    action: "Updated Product Prices",
+    time: "Yesterday",
+  },
+  {
+    id: 3,
+    category: "Electronics",
+    action: "Low stock warning: Bluetooth Speaker",
+    time: "2 days ago",
+  },
+  {
+    id: 4,
+    category: "Fashion",
+    action: "New seasonal handbags uploaded",
+    time: "3 days ago",
+  },
 ];
 
 const initialProducts = [
-  { id: 1, product: "Running Shoes H520", category: "Footwear", sales: "$440", stock: 25, status: "Available" },
-  { id: 2, product: "Bluetooth Speaker", category: "Electronics", sales: "$240", stock: 10, status: "Low Stock" },
-  { id: 3, product: "Handbag", category: "Fashion", sales: "$180", stock: 50, status: "Available" },
+  {
+    id: 1,
+    product: "Running Shoes H520",
+    category: "Footwear",
+    sales: "$440",
+    stock: 25,
+    status: "Available",
+  },
+  {
+    id: 2,
+    product: "Bluetooth Speaker",
+    category: "Electronics",
+    sales: "$240",
+    stock: 10,
+    status: "Low Stock",
+  },
+  {
+    id: 3,
+    product: "Handbag",
+    category: "Fashion",
+    sales: "$180",
+    stock: 50,
+    status: "Available",
+  },
 ];
 
-/* ──────────────── COMPONENT ──────────────── */
+/* ───────────────── COMPONENT ───────────────── */
 export default function ReportDashboard() {
   const router = useRouter();
+
+  // filters / UI state
+  const [chartPeriod, setChartPeriod] = useState("yearly");
+  const [chartData, setChartData] = useState(chartDataSets.yearly);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("All");
   const [showWarning, setShowWarning] = useState(true);
 
-  // Auto close warning after 1 min
+  useEffect(() => setChartData(chartDataSets[chartPeriod]), [chartPeriod]);
+
+  // warning auto-close (1 minute)
   useEffect(() => {
-    if (showWarning) {
-      const timer = setTimeout(() => setShowWarning(false), 60000);
-      return () => clearTimeout(timer);
-    }
+    if (!showWarning) return;
+    const t = setTimeout(() => setShowWarning(false), 60000);
+    return () => clearTimeout(t);
   }, [showWarning]);
 
   const filteredProducts = initialProducts.filter((p) => {
-    const matchesSearch = p.product.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = filterCategory === "All" || p.category === filterCategory;
+    const matchesSearch = p.product
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      filterCategory === "All" || p.category === filterCategory;
     return matchesSearch && matchesCategory;
   });
 
-  const lowStockItems = filteredProducts.filter((p) => p.stock < 15);
+  const lowStockItems = initialProducts.filter((p) => p.stock < 15);
   const filteredCategories =
-    filterCategory === "All" ? baseCategoryData : baseCategoryData.filter((c) => c.name === filterCategory);
+    filterCategory === "All"
+      ? baseCategoryData
+      : baseCategoryData.filter((c) => c.name === filterCategory);
   const filteredActivities =
-    filterCategory === "All" ? baseActivities : baseActivities.filter((a) => a.category === filterCategory);
+    filterCategory === "All"
+      ? baseActivities
+      : baseActivities.filter((a) => a.category === filterCategory);
 
+  /* -------------------- Exports -------------------- */
   const handleExportPDF = () => {
     const doc = new jsPDF();
     doc.text("Inventory Report", 14, 16);
     autoTable(doc, {
-      startY: 20,
+      startY: 22,
       head: [["Product", "Category", "Sales", "Stock", "Status"]],
-      body: filteredProducts.map((p) => [p.product, p.category, p.sales, p.stock, p.status]),
+      body: filteredProducts.map((p) => [
+        p.product,
+        p.category,
+        p.sales,
+        p.stock,
+        p.status,
+      ]),
     });
     doc.save("report.pdf");
   };
@@ -111,107 +198,223 @@ export default function ReportDashboard() {
   const handlePrint = () => window.print();
 
   return (
-    <div className="min-h-screen bg-[#f9fafc] text-gray-800 px-4 sm:px-5 md:px-8 py-6 overflow-hidden">
-      {/* ───────── HEADER ───────── */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+    <div className="min-h-screen bg-[#f9fafc] text-gray-800 px-4 sm:px-6 lg:px-8 py-6">
+      {/* HEADER */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h1 className="text-lg sm:text-2xl font-semibold">Report Dashboard</h1>
+
         <div className="flex flex-wrap gap-2 w-full sm:w-auto">
-          <button onClick={handleExportPDF} className="flex items-center justify-center gap-1 bg-blue-500 text-white px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-blue-600 transition w-full sm:w-auto">
+          <button
+            onClick={handleExportPDF}
+            className="flex items-center gap-2 bg-blue-600 text-white px-3 py-1.5 text-sm rounded-md hover:bg-blue-700 w-full sm:w-auto justify-center"
+          >
             <FileDown size={14} /> PDF
           </button>
-          <button onClick={handleExportExcel} className="flex items-center justify-center gap-1 bg-green-500 text-white px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-green-600 transition w-full sm:w-auto">
+          <button
+            onClick={handleExportExcel}
+            className="flex items-center gap-2 bg-green-600 text-white px-3 py-1.5 text-sm rounded-md hover:bg-green-700 w-full sm:w-auto justify-center"
+          >
             <FileSpreadsheet size={14} /> Excel
           </button>
-          <button onClick={handlePrint} className="flex items-center justify-center gap-1 bg-gray-500 text-white px-3 py-1.5 text-xs sm:text-sm rounded-lg hover:bg-gray-600 transition w-full sm:w-auto">
+          <button
+            onClick={handlePrint}
+            className="flex items-center gap-2 bg-gray-600 text-white px-3 py-1.5 text-sm rounded-md hover:bg-gray-700 w-full sm:w-auto justify-center"
+          >
             <Printer size={14} /> Print
           </button>
         </div>
       </div>
 
-      {/* ───────── WARNING BANNER ───────── */}
+      {/* WARNING BANNER (auto-close or manual close) */}
       {showWarning && lowStockItems.length > 0 && (
         <motion.div
-          initial={{ opacity: 0, y: -10 }}
+          initial={{ opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-red-50 text-yellow-800 p-3 mb-5 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-sm"
+          className="bg-red-50 border-l-4 border-red-300 p-3 mb-6 rounded-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2"
         >
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="text-red-600 w-4 h-4 flex-shrink-0" />
-            <span>
-              {lowStockItems.length} product(s) are low on stock.{" "}
-              <button className="underline text-blue-600 font-medium" onClick={() => setFilterCategory("Electronics")}>
-                View details
-              </button>
-            </span>
+          <div className="flex gap-3 items-center">
+            <AlertTriangle className="text-yellow-700 w-5 h-5" />
+            <div className="text-sm">
+              <span className="font-medium">
+                {lowStockItems.length} low stock item(s)
+              </span>
+              <div className="text-xs text-gray-600">
+                <button
+                  onClick={() => {
+                    setFilterCategory("Electronics");
+                    setShowWarning(false);
+                  }}
+                  className="underline text-blue-600"
+                >
+                  View details
+                </button>{" "}
+                or check product list.
+              </div>
+            </div>
           </div>
-          <button onClick={() => setShowWarning(false)} className="text-gray-500 hover:text-gray-700 self-end sm:self-auto">
+          <button
+            onClick={() => setShowWarning(false)}
+            className="self-end sm:self-auto text-gray-600 hover:text-gray-800"
+          >
             <X size={16} />
           </button>
         </motion.div>
       )}
 
-      {/* ───────── SUMMARY CARDS ───────── */}
-      <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      {/* SUMMARY CARDS */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {[
-          { title: "Total Revenue", value: "$205.25k", icon: <ShoppingBag className="text-purple-600" />, color: "purple", trend: "+4.5%" },
-          { title: "Total Customers", value: "2,755", icon: <Users className="text-blue-600" />, color: "blue", trend: "+3.2%" },
-          { title: "Total Products", value: "2058", icon: <Package className="text-yellow-600" />, color: "yellow", trend: "+4.1%" },
-          { title: "Low Stock Items", value: lowStockItems.length.toString(), icon: <TrendingUp className="text-red-500" />, color: "red", trend: "-1.2%" },
+          {
+            title: "Total Revenue",
+            value: "$205.25k",
+            icon: <ShoppingBag className="text-purple-600" />,
+            color: "purple",
+            trend: "+4.5%",
+          },
+          {
+            title: "Total Customers",
+            value: "2,755",
+            icon: <Users className="text-blue-600" />,
+            color: "blue",
+            trend: "+3.2%",
+          },
+          {
+            title: "Total Products",
+            value: "2058",
+            icon: <Package className="text-yellow-600" />,
+            color: "yellow",
+            trend: "+4.1%",
+          },
+          {
+            title: "Low Stock Items",
+            value: `${lowStockItems.length}`,
+            icon: <TrendingUp className="text-red-500" />,
+            color: "red",
+            trend: "-1.2%",
+          },
         ].map((card, i) => (
           <motion.div
             key={i}
-            className="bg-white rounded-xl p-4 shadow-sm border w-full"
-            initial={{ opacity: 0, y: 10 }}
+            className="bg-white rounded-lg p-4 shadow-sm border"
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
+            transition={{ delay: i * 0.08 }}
           >
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-start">
               <div>
                 <p className="text-xs text-gray-500">{card.title}</p>
-                <h3 className="text-lg font-semibold">{card.value}</h3>
+                <div className="text-lg font-semibold">{card.value}</div>
               </div>
-              <div className={`p-2 rounded-lg bg-${card.color}-100`}>{card.icon}</div>
+              <div className={`p-2 rounded-md bg-${card.color}-100`}>
+                {card.icon}
+              </div>
             </div>
-            <p className={`text-xs mt-1 ${card.trend.startsWith("-") ? "text-red-600" : "text-green-600"}`}>{card.trend}</p>
+            <div
+              className={`mt-2 text-xs ${
+                card.trend.startsWith("-") ? "text-red-600" : "text-green-600"
+              }`}
+            >
+              {card.trend}
+            </div>
           </motion.div>
         ))}
       </div>
 
-      {/* ───────── CHARTS ───────── */}
+      {/* CHARTS: Sales Analytics + Category Pie */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        {/* Line Chart */}
+        {/* Sales Analytics (dual-line area-like with gradients) */}
         <motion.div
-          className="bg-white rounded-xl p-4 shadow-sm border lg:col-span-2"
+          className="bg-white rounded-lg p-4 shadow-sm border lg:col-span-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >
-          <h2 className="text-base font-semibold text-gray-700 mb-3">Sales Trend</h2>
-          <div className="h-44 sm:h-56 md:h-64">
+          <div className="flex justify-between items-center mb-2">
+            <div>
+              <h2 className="text-base font-semibold text-gray-800">
+                Smooth Sales Analytics
+              </h2>
+              <p className="text-sm text-gray-500">
+                Quick analytics on orderings (smoothed view)
+              </p>
+            </div>
+
+            {/* 👇 PERIOD BUTTONS */}
+            <div className="flex gap-2">
+              {["weekly", "monthly", "yearly"].map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setChartPeriod(p)}
+                  className={`px-3 py-1 text-sm rounded-md border ${
+                    chartPeriod === p
+                      ? "bg-gray-200 font-medium"
+                      : "hover:bg-gray-100"
+                  }`}
+                >
+                  {p.charAt(0).toUpperCase() + p.slice(1)}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={salesData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-                <XAxis dataKey="name" tick={{ fontSize: 10 }} />
-                <YAxis tick={{ fontSize: 10 }} />
+              <AreaChart
+                data={chartData}
+                margin={{ top: 10, right: 20, left: 0, bottom: 0 }}
+              >
+                <defs>
+                  <linearGradient id="colorOrders" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#4F46E5" stopOpacity={0.4} />
+                    <stop offset="95%" stopColor="#4F46E5" stopOpacity={0.05} />
+                  </linearGradient>
+                  <linearGradient id="colorInHand" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#EF4444" stopOpacity={0.4} />
+                    <stop offset="95%" stopColor="#EF4444" stopOpacity={0.05} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                <XAxis dataKey="name" />
+                <YAxis />
                 <Tooltip />
-                <Line type="monotone" dataKey="sales" stroke="#6366f1" strokeWidth={2.5} dot={false} />
-              </LineChart>
+                <Area
+                  type="monotone"
+                  dataKey="orders"
+                  stroke="#4F46E5"
+                  fill="url(#colorOrders)"
+                />
+                <Area
+                  type="monotone"
+                  dataKey="inHand"
+                  stroke="#EF4444"
+                  fill="url(#colorInHand)"
+                />
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </motion.div>
 
         {/* Pie Chart */}
         <motion.div
-          className="bg-white rounded-xl p-4 shadow-sm border"
+          className="bg-white rounded-lg p-4 shadow-sm border"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >
-          <h2 className="text-base font-semibold text-gray-700 mb-3">Category Distribution</h2>
-          <div className="h-44 sm:h-56 flex justify-center">
+          <h3 className="text-base font-semibold text-gray-800 mb-2">
+            Category Distribution
+          </h3>
+          <div className="h-56 flex items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie data={filteredCategories} dataKey="value" nameKey="name" outerRadius={70}>
-                  {filteredCategories.map((entry, i) => (
-                    <Cell key={`cell-${i}`} fill={entry.color} />
+                <Pie
+                  data={filteredCategories}
+                  dataKey="value"
+                  nameKey="name"
+                  outerRadius={80}
+                  innerRadius={40}
+                  label
+                >
+                  {filteredCategories.map((entry, idx) => (
+                    <Cell key={idx} fill={entry.color} />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -221,59 +424,14 @@ export default function ReportDashboard() {
         </motion.div>
       </div>
 
-      {/* ───────── ACTIVITY & QUICK STATS ───────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <motion.div
-          className="bg-white rounded-xl p-4 shadow-sm border"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          <h2 className="font-semibold text-gray-700 mb-3">Recent Activities</h2>
-          <div className="space-y-3 text-sm">
-            {filteredActivities.map((a) => (
-              <div key={a.id} className="flex gap-3">
-                <Clock className="text-gray-400 w-4 h-4 mt-0.5" />
-                <div>
-                  <p className="font-medium text-gray-800">{a.action}</p>
-                  <p className="text-xs text-gray-500">{a.time}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        <motion.div
-          className="bg-white rounded-xl p-4 shadow-sm border"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          <h2 className="font-semibold text-gray-700 mb-3">Quick Stats</h2>
-          <div className="space-y-3 text-sm">
-            <div className="flex items-center gap-3">
-              <BarChart3 className="text-indigo-500 w-4 h-4" />
-              <p>Active Categories: <span className="font-medium">{filteredCategories.length}</span></p>
-            </div>
-            <div className="flex items-center gap-3">
-              <TrendingUp className="text-green-500 w-4 h-4" />
-              <p>Low Stock %: <span className="font-medium">{((lowStockItems.length / initialProducts.length) * 100).toFixed(0)}%</span></p>
-            </div>
-            <div className="flex items-center gap-3">
-              <ShoppingBag className="text-purple-500 w-4 h-4" />
-              <p>Average Sales: <span className="font-medium">$320</span></p>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* ───────── PRODUCT TABLE ───────── */}
-      <motion.div
-        className="bg-white rounded-xl p-4 shadow-sm border"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-      >
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+      {/* SEARCH + FILTER (above table) */}
+      <div className="bg-white rounded-lg p-4 shadow-sm border mb-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
           <div className="relative w-full sm:w-64">
-            <Search className="absolute left-3 top-2.5 text-gray-400" size={16} />
+            <Search
+              className="absolute left-3 top-2.5 text-gray-400"
+              size={16}
+            />
             <input
               type="text"
               placeholder="Search product..."
@@ -282,28 +440,42 @@ export default function ReportDashboard() {
               className="w-full pl-9 pr-3 py-2 border rounded-md text-sm outline-none focus:ring focus:ring-blue-100"
             />
           </div>
+
           <select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
-            className="w-full sm:w-auto border px-3 py-2 rounded-md text-sm outline-none focus:ring focus:ring-blue-100"
+            className="border px-3 py-2 rounded-md text-sm"
           >
             <option value="All">All Categories</option>
-            <option value="Footwear">Footwear</option>
-            <option value="Electronics">Electronics</option>
-            <option value="Fashion">Fashion</option>
+            {baseCategoryData.map((c) => (
+              <option key={c.name} value={c.name}>
+                {c.name}
+              </option>
+            ))}
           </select>
         </div>
+      </div>
 
-        <h2 className="font-semibold text-gray-700 mb-3">Detailed Report</h2>
+      {/* PRODUCT TABLE */}
+      <motion.div
+        className="bg-white rounded-lg p-4 shadow-sm border mb-6"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+        <h3 className="text-base font-semibold text-gray-800 mb-3">
+          Detailed Report
+        </h3>
+
+        {/* table is responsive with fixed columns; no horizontal scroll required */}
         <div className="overflow-hidden">
-          <table className="w-full text-left text-xs sm:text-sm table-fixed">
+          <table className="w-full text-left text-sm table-fixed">
             <thead>
               <tr className="text-gray-500 border-b">
-                <th className="py-2 w-1/5">Product</th>
+                <th className="py-2 w-1/4">Product</th>
                 <th className="py-2 w-1/5">Category</th>
                 <th className="py-2 w-1/5">Sales</th>
-                <th className="py-2 w-1/5">Stock</th>
-                <th className="py-2 w-1/5">Status</th>
+                <th className="py-2 w-1/6">Stock</th>
+                <th className="py-2 w-1/6">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -312,23 +484,39 @@ export default function ReportDashboard() {
                   <motion.tr
                     key={row.id}
                     className="border-b hover:bg-gray-50 transition cursor-pointer"
-                    onClick={() => router.push(`/inventory/products/${row.id}`)}
-                    initial={{ opacity: 0, y: 5 }}
+                    initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.05 * i }}
+                    transition={{ delay: i * 0.04 }}
+                    onClick={() => {
+                      // Product detail route (app router)
+                      // Product detail page should be placed at: app/inventory/products/[id]/page.jsx
+                      router.push(`/inventory/products/${row.id}`);
+                    }}
                   >
-                    <td className="py-2">{row.product}</td>
-                    <td>{row.category}</td>
-                    <td>{row.sales}</td>
-                    <td className={`${row.stock < 15 ? "text-red-500 font-medium" : ""}`}>{row.stock}</td>
-                    <td className={`${row.status === "Low Stock" ? "text-red-500 font-medium" : "text-green-600 font-medium"}`}>
+                    <td className="py-3 pr-2">{row.product}</td>
+                    <td className="py-3">{row.category}</td>
+                    <td className="py-3">{row.sales}</td>
+                    <td
+                      className={`py-3 ${
+                        row.stock < 15 ? "text-red-500 font-medium" : ""
+                      }`}
+                    >
+                      {row.stock}
+                    </td>
+                    <td
+                      className={`${
+                        row.status === "Low Stock"
+                          ? "text-red-500 font-medium"
+                          : "text-green-600 font-medium"
+                      } py-3`}
+                    >
                       {row.status}
                     </td>
                   </motion.tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className="text-center text-gray-500 py-4">
+                  <td colSpan={5} className="text-center text-gray-500 py-6">
                     No products found.
                   </td>
                 </tr>
@@ -337,6 +525,67 @@ export default function ReportDashboard() {
           </table>
         </div>
       </motion.div>
+
+      {/* RECENT ACTIVITIES & QUICK STATS */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <motion.div
+          className="bg-white rounded-lg p-4 shadow-sm border"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          <h3 className="text-base font-semibold text-gray-800 mb-3">
+            Recent Activities
+          </h3>
+          <div className="space-y-3 text-sm">
+            {filteredActivities.map((a) => (
+              <div key={a.id} className="flex gap-3">
+                <Clock className="text-gray-400 w-4 h-4 mt-0.5" />
+                <div>
+                  <div className="font-medium text-gray-800">{a.action}</div>
+                  <div className="text-xs text-gray-500">{a.time}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        <motion.div
+          className="bg-white rounded-lg p-4 shadow-sm border"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          <h3 className="text-base font-semibold text-gray-800 mb-3">
+            Quick Stats
+          </h3>
+          <div className="space-y-3 text-sm">
+            <div className="flex items-center gap-3">
+              <BarChart3 className="text-indigo-500 w-4 h-4" />
+              <div>
+                Active Categories:{" "}
+                <span className="font-medium">{filteredCategories.length}</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <TrendingUp className="text-green-500 w-4 h-4" />
+              <div>
+                Low Stock %:{" "}
+                <span className="font-medium">
+                  {Math.round(
+                    (lowStockItems.length / initialProducts.length) * 100
+                  )}
+                  %
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <ShoppingBag className="text-purple-500 w-4 h-4" />
+              <div>
+                Average Sales: <span className="font-medium">$320</span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 }
