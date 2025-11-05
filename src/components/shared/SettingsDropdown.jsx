@@ -20,7 +20,7 @@ const languages = {
   en: "English",
   fr: "Français",
   sw: "Kiswahili",
-  kin: "Kinyarwanda",
+  rw: "Kinyarwanda",
 };
 
 export default function SettingsDropdown({ anchor, open, onClose }) {

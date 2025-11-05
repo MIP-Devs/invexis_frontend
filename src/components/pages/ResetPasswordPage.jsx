@@ -5,47 +5,22 @@ import { useRouter, useParams } from "next/navigation";
 import Image from "next/image";
 import FormWrapper from "@/components/shared/FormWrapper";
 import { HiChevronLeft } from "react-icons/hi";
+import { useTranslations, useLocale } from "next-intl";
 
 export default function ResetPasswordPage() {
+  const t = useTranslations("auth.reset.reset");
+  const tForm = useTranslations("form");
+  const tAuth = useTranslations("auth");
+  const locale = useLocale();
   const router = useRouter();
   const params = useParams();
-  const { token } = params; // token from URL
+  const { token } = params;
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-
-  //   const handleSubmit = async (e) => {
-  //     e.preventDefault();
-  //     setError("");
-  //     setSuccess("");
-
-  //     if (password !== confirmPassword) {
-  //       setError("Passwords do not match.");
-  //       return;
-  //     }
-
-  //     setSubmitting(true);
-  //     try {
-  //       // POST /password/reset/confirm
-  //       const res = await fetch(`/api/auth/password/reset/confirm`, {
-  //         method: "POST",
-  //         body: JSON.stringify({ token, password }),
-  //         headers: { "Content-Type": "application/json" },
-  //       });
-
-  //       if (!res.ok) throw new Error("Failed to reset password");
-
-  //       setSuccess("Password reset successfully!");
-  //       setTimeout(() => router.push("/login"), 2000);
-  //     } catch (err) {
-  //       setError(err.message || "Reset failed");
-  //     } finally {
-  //       setSubmitting(false);
-  //     }
-  //   };
 
   return (
     <div className="w-screen h-screen flex flex-col md:flex-row bg-white dark:bg-zinc-950">
@@ -60,19 +35,19 @@ export default function ResetPasswordPage() {
       </div>
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-6 md:p-10">
         <FormWrapper
-          title="Reset Password 🔑"
-          desc="Enter your new password below"
-          submitLabel={submitting ? "Resetting..." : "Reset Password"}
+          title={`${t("title")} [key]`}
+          desc={t("subtitle")}
+          submitLabel={submitting ? t("resetting") : t("resetButton")}
           fields={[
             {
-              label: "New Password",
+              label: t("newPassword"),
               type: "password",
               value: password,
               onChange: (e) => setPassword(e.target.value),
               required: true,
             },
             {
-              label: "Confirm New Password",
+              label: t("confirmNewPassword"),
               type: "password",
               value: confirmPassword,
               onChange: (e) => setConfirmPassword(e.target.value),
@@ -81,9 +56,9 @@ export default function ResetPasswordPage() {
           ]}
           extraLinks={[
             {
-              href: "/auth/login",
+              href: `/${locale}/auth/login`,
               icon: <HiChevronLeft />,
-              label: "Return to Login",
+              label: tAuth("returnToLogin"),
             },
           ]}
           error={error}

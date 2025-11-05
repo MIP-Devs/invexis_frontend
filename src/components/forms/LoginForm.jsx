@@ -6,11 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import {
-  IconButton,
-  InputAdornment,
-  CircularProgress,
-} from "@mui/material";
+import { IconButton, InputAdornment, CircularProgress } from "@mui/material";
 import { HiEye, HiEyeOff, HiArrowRight } from "react-icons/hi";
 import FormWrapper from "../shared/FormWrapper";
 import { loginUser } from "@/store/authActions";
@@ -25,7 +21,7 @@ const LoginPage = () => {
   const tForm = useTranslations("form");
   const theme = useSelector(selectTheme); // Get theme from Redux
 
-  const [identifier, setIdentifier] = useState(""); 
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -85,7 +81,7 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="w-screen h-screen flex text-sm flex-col md:flex-row bg-white dark:bg-zinc-950">
+    <div className="w-screen h-screen flex text-sm flex-col md:flex-row bg-white dark:bg-[#1a1a1a]">
       {/* Left Side - Image */}
       <div className="w-full md:w-1/2 h-1/2 md:h-full flex items-center justify-center bg-orange-100 relative">
         <Image
@@ -110,7 +106,10 @@ const LoginPage = () => {
           error={error}
           oauthOptions={["google", "apple", "phone", "otp"]}
           extraLinks={[
-            { href: `/${locale}/auth/signup`, label: "Don't have an account? Sign Up" },
+            {
+              href: `/${locale}/auth/signup`,
+              label: t("signup.noAccount"),
+            },
           ]}
           showTerms={true}
           acceptedTerms={acceptTerms}

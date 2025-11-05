@@ -5,41 +5,19 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import FormWrapper from "@/components/shared/FormWrapper";
 import { HiChevronLeft } from "react-icons/hi";
+import { useTranslations, useLocale } from "next-intl";
 
 export default function VerifyEmailPage() {
+  const t = useTranslations("auth.verifyEmail");
+  const tAuth = useTranslations("auth");
+  const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const token = searchParams.get("token"); // token from query string
+  const token = searchParams.get("token");
 
   const [submitting, setSubmitting] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-
-  //   useEffect(() => {
-  //     const verifyEmail = async () => {
-  //       setSubmitting(true);
-  //       setError("");
-  //       try {
-  //         // POST /me/verify/resend/:type
-  //         const res = await fetch(`/api/auth/verify-email`, {
-  //           method: "POST",
-  //           body: JSON.stringify({ token }),
-  //           headers: { "Content-Type": "application/json" },
-  //         });
-
-  //         if (!res.ok) throw new Error("Email verification failed");
-  //         setSuccess("Email verified successfully!");
-  //         setTimeout(() => router.push("/login"), 2000);
-  //       } catch (err) {
-  //         setError(err.message || "Verification failed");
-  //       } finally {
-  //         setSubmitting(false);
-  //       }
-  //     };
-
-  //     if (token) verifyEmail();
-  //     else setError("Invalid verification token.");
-  //   }, [token, router]);
 
   return (
     <div className="w-screen h-screen flex flex-col md:flex-row bg-white dark:bg-zinc-950">
@@ -54,16 +32,16 @@ export default function VerifyEmailPage() {
       </div>
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-6 md:p-10">
         <FormWrapper
-          title="Verify Email 📧"
-          desc="We are verifying your email address..."
+          title={`${t("title")} [email]`}
+          desc={t("subtitle")}
           onSubmit={(e) => e.preventDefault()}
-          submitLabel="Verifying..."
+          submitLabel={t("verifying")}
           fields={[]}
           extraLinks={[
             {
-              href: "/auth/login",
+              href: `/${locale}/auth/login`,
               icon: <HiChevronLeft />,
-              label: "Return to Login",
+              label: tAuth("returnToLogin"),
             },
           ]}
           error={error}

@@ -38,35 +38,55 @@
     },
     "signup": {
       "title": "Kwiyandikisha",
-      "subtitle": "Hanga konti nshya"
+      "subtitle": "Hanga konti nshya",
+      "noAccount": "Nta konti ufite? Iyandikishe"
     },
     "verifyEmail": {
-      "title": "Emeza imeyili"
+      "title": "Emeza imeyili",
+      "subtitle": "Turi kugenzura aderesi ya imeyili yawe...",
+      "verifying": "Kugenzura..."
     },
     "googleCallback": {
       "title": "Kwinjira ukoresheje Google"
     },
     "otp": {
       "request": {
-        "title": "Saba OTP"
+        "title": "Saba OTP",
+        "subtitle": "Shyiramo imeyili cyangwa telefoni yawe kugira ngo wakire ijambo ry'ibanga ry'igihe kimwe",
+        "label": "Imeyili cyangwa Telefoni",
+        "sendButton": "Ohereza OTP",
+        "sending": "Kohereza..."
       },
       "verify": {
-        "title": "Emeza OTP"
+        "title": "Emeza OTP",
+        "subtitle": "Shyiramo OTP yoherejwe ku imeyili cyangwa telefoni yawe",
+        "label": "Ijambo ry'ibanga ry'igihe kimwe",
+        "verifyButton": "Emeza OTP",
+        "verifying": "Kugenzura..."
       }
     },
     "reset": {
       "request": {
-        "title": "Saba guhindura ijambo ry'ibanga"
+        "title": "Saba guhindura ijambo ry'ibanga",
+        "subtitle": "Nyamuneka shyiramo aderesi ya imeyili yahujwe n'ikonti yawe kandi tuzakohereza kiungo cyo gusubiramo ijambo ry'ibanga ryawe.",
+        "sendButton": "Ohereza Kiungo",
+        "sending": "Kohereza..."
       },
       "reset": {
-        "title": "Hindura ijambo ry'ibanga"
+        "title": "Hindura ijambo ry'ibanga",
+        "subtitle": "Shyiramo ijambo ry'ibanga rishya ryawe hepfo",
+        "newPassword": "Ijambo ry'ibanga Rishya",
+        "confirmNewPassword": "Emeza Ijambo ry'ibanga Rishya",
+        "resetButton": "Subiramo Ijambo ry'ibanga",
+        "resetting": "Kusubiramo..."
       }
     },
     "loginButton": "Injira",
     "signupButton": "Iyandikishe",
     "logout": "Sohoka",
     "forgotPassword": "Wibagiwe ijambo ry'ibanga?",
-    "rememberMe": "Wibuke"
+    "rememberMe": "Wibuke",
+    "returnToLogin": "Subira ku Kwinjira"
   },
   "inventory": {
     "title": "Ububiko",
@@ -155,7 +175,9 @@
   },
   "buttons": {
     "enable": "Shyiraho",
-    "disable": "Hakuweho"
+    "disable": "Hakuweho",
+    "agree": "Emeza",
+    "cancel": "Hagarika"
   },
   "common": {
     "noData": "Nta makuru aboneka",
@@ -181,5 +203,9 @@
       "satisfaction": "Urwego rwo kunyurwa",
       "uptime": "Garanti yo gukora"
     }
+  },
+  "termsPopup": {
+    "title": "Amategeko & Itegeko ry'Ibanga",
+    "description": "Nyamuneka soma kandi wemere Amategeko yacu & Amabwiriza hamwe Itegeko ry'Ibanga mbere yo kuendelea."
   }
 }

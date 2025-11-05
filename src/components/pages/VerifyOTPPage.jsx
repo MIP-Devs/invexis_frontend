@@ -5,32 +5,17 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import FormWrapper from "@/components/shared/FormWrapper";
 import { HiChevronLeft } from "react-icons/hi";
+import { useTranslations, useLocale } from "next-intl";
 
 export default function VerifyOTPPage() {
+  const t = useTranslations("auth.otp.verify");
+  const tAuth = useTranslations("auth");
+  const locale = useLocale();
   const router = useRouter();
+
   const [otp, setOtp] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-
-  //   const handleSubmit = async (e) => {
-  //     e.preventDefault();
-  //     setSubmitting(true);
-  //     setError("");
-
-  //     try {
-  //       // POST /login/otp/verify
-  //       await fetch("/api/auth/otp/verify", {
-  //         method: "POST",
-  //         body: JSON.stringify({ otp }),
-  //         headers: { "Content-Type": "application/json" },
-  //       });
-  //       router.push("/inventory");
-  //     } catch (err) {
-  //       setError(err.message || "OTP verification failed");
-  //     } finally {
-  //       setSubmitting(false);
-  //     }
-  //   };
 
   return (
     <div className="w-screen h-screen flex flex-col md:flex-row bg-white dark:bg-zinc-950">
@@ -45,12 +30,12 @@ export default function VerifyOTPPage() {
       </div>
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-6 md:p-10">
         <FormWrapper
-          title="Verify OTP 🔐"
-          desc="Enter the OTP sent to your email or phone"
-          submitLabel={submitting ? "Verifying..." : "Verify OTP"}
+          title={`${t("title")} [lock]`}
+          desc={t("subtitle")}
+          submitLabel={submitting ? t("verifying") : t("verifyButton")}
           fields={[
             {
-              label: "One-Time Password",
+              label: t("label"),
               type: "text",
               value: otp,
               onChange: (e) => setOtp(e.target.value),
@@ -59,11 +44,11 @@ export default function VerifyOTPPage() {
           ]}
           extraLinks={[
             {
-              href: "/auth/login",
+              href: `/${locale}/auth/login`,
               icon: <HiChevronLeft />,
-              label: "Return to Login",
+              label: tAuth("returnToLogin"),
             },
-          ]} 
+          ]}
           error={error}
         />
       </div>

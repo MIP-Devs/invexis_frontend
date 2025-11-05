@@ -38,35 +38,55 @@
     },
     "signup": {
       "title": "Jisajili",
-      "subtitle": "Tengeneza akaunti mpya"
+      "subtitle": "Unda akaunti mpya",
+      "noAccount": "Huna akaunti? Sajili"
     },
     "verifyEmail": {
-      "title": "Thibitisha Barua Pepe"
+      "title": "Thibitisha Barua Pepe",
+      "subtitle": "Tunathibitisha anwani yako ya barua pepe...",
+      "verifying": "Tunathibitisha..."
     },
     "googleCallback": {
       "title": "Kuingia kwa Google"
     },
     "otp": {
       "request": {
-        "title": "Omba OTP"
+        "title": "Omba OTP",
+        "subtitle": "Ingiza barua pepe au nambari ya simu ili kupokea nenosiri la mara moja",
+        "label": "Barua pepe au Simu",
+        "sendButton": "Tuma OTP",
+        "sending": "Tunatumia..."
       },
       "verify": {
-        "title": "Thibitisha OTP"
+        "title": "Thibitisha OTP",
+        "subtitle": "Ingiza OTP iliyotumwa kwa barua pepe au simu yako",
+        "label": "Nenosiri la Mara Moja",
+        "verifyButton": "Thibitisha OTP",
+        "verifying": "Tunathibitisha..."
       }
     },
     "reset": {
       "request": {
-        "title": "Omba Urejeshaji wa Nenosiri"
+        "title": "Omba Urejeshaji wa Nenosiri",
+        "subtitle": "Tafadhali ingiza anwani ya barua pepe iliyohusishwa na akaunti yako na tutakuwasilisha kiungo ili kurekebisha nenosiri lako.",
+        "sendButton": "Tuma Kiungo",
+        "sending": "Tunatumia..."
       },
       "reset": {
-        "title": "Badilisha Nenosiri"
+        "title": "Badilisha Nenosiri",
+        "subtitle": "Ingiza nenosiri lako jipya hapa chini",
+        "newPassword": "Nenosiri Jipya",
+        "confirmNewPassword": "Thibitisha Nenosiri Jipya",
+        "resetButton": "Rekebisha Nenosiri",
+        "resetting": "Tunarekebisha..."
       }
     },
     "loginButton": "Ingia",
     "signupButton": "Jisajili",
     "logout": "Ondoka",
     "forgotPassword": "Umesahau nenosiri?",
-    "rememberMe": "Nikumbuke"
+    "rememberMe": "Nikumbuke",
+    "returnToLogin": "Rudi kwa Kuingia"
   },
   "inventory": {
     "title": "Hesabu",
@@ -155,7 +175,9 @@
   },
   "buttons": {
     "enable": "Washa",
-    "disable": "Zima"
+    "disable": "Zima",
+    "agree": "Kubali",
+    "cancel": "Ghairi"
   },
   "common": {
     "noData": "Hakuna data inapatikana",
@@ -181,5 +203,9 @@
       "satisfaction": "Kiwango cha Kuridhika",
       "uptime": "Dhamana ya Upatikanaji"
     }
+  },
+  "termsPopup": {
+    "title": "Sheria na Sera ya Faragha",
+    "description": "Tafadhali angalia na kukubali Sheria na Masharti yetu na Sera ya Faragha kabla ya kuendelea."
   }
 }

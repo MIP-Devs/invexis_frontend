@@ -1,8 +1,12 @@
 "use client";
 
 import { Button } from "@mui/material";
+import { useTranslations } from "next-intl";
 
 export default function TermsAndPrivacyPopup({ open, onAgree, onClose }) {
+  const tPopup = useTranslations("termsPopup");
+  const tButtons = useTranslations("buttons");
+
   if (!open) return null;
 
   return (
@@ -14,10 +18,9 @@ export default function TermsAndPrivacyPopup({ open, onAgree, onClose }) {
         className="bg-white rounded-xl p-6 max-w-lg w-full shadow-lg"
         onClick={(e) => e.stopPropagation()} // prevents closing when clicking inside the popup
       >
-        <h2 className="text-xl font-bold mb-4">Terms & Privacy Policy</h2>
+        <h2 className="text-xl font-bold mb-4">{tPopup("title")}</h2>
         <p className="text-gray-700 mb-4 text-sm">
-          Please review and accept our Terms & Conditions and Privacy Policy
-          before proceeding.
+          {tPopup("description")}
         </p>
         <div className="flex justify-end gap-4">
           <Button
@@ -31,7 +34,7 @@ export default function TermsAndPrivacyPopup({ open, onAgree, onClose }) {
               ":hover": { backgroundColor: "#d1d5db" },
             }}
           >
-            Cancel
+            {tButtons("cancel")}
           </Button>
           <Button
             variant="contained"
@@ -42,7 +45,7 @@ export default function TermsAndPrivacyPopup({ open, onAgree, onClose }) {
               ":hover": { opacity: 0.9 },
             }}
           >
-            Agree
+            {tButtons("agree")}
           </Button>
         </div>
       </div>

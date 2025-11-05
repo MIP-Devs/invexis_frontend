@@ -38,35 +38,55 @@
     },
     "signup": {
       "title": "Sign up",
-      "subtitle": "Create a new account"
+      "subtitle": "Create a new account",
+      "noAccount": "Don't have an account? Sign Up"
     },
     "verifyEmail": {
-      "title": "Verify Email"
+      "title": "Verify Email",
+      "subtitle": "We are verifying your email address...",
+      "verifying": "Verifying..."
     },
     "googleCallback": {
       "title": "Signing in with Google"
     },
     "otp": {
       "request": {
-        "title": "Request OTP"
+        "title": "Request OTP",
+        "subtitle": "Enter your email or phone to receive a one-time password",
+        "label": "Email or Phone",
+        "sendButton": "Send OTP",
+        "sending": "Sending..."
       },
       "verify": {
-        "title": "Verify OTP"
+        "title": "Verify OTP",
+        "subtitle": "Enter the OTP sent to your email or phone",
+        "label": "One-Time Password",
+        "verifyButton": "Verify OTP",
+        "verifying": "Verifying..."
       }
     },
     "reset": {
       "request": {
-        "title": "Request Password Reset"
+        "title": "Reset Password",
+        "subtitle": "Please enter the email address associated with your account and we'll email you a link to reset your password.",
+        "sendButton": "Send Link",
+        "sending": "Sending..."
       },
       "reset": {
-        "title": "Reset Password"
+        "title": "Reset Password",
+        "subtitle": "Enter your new password below",
+        "newPassword": "New Password",
+        "confirmNewPassword": "Confirm New Password",
+        "resetButton": "Reset Password",
+        "resetting": "Resetting..."
       }
     },
     "loginButton": "Log in",
     "signupButton": "Sign up",
     "logout": "Log out",
     "forgotPassword": "Forgot password?",
-    "rememberMe": "Remember me"
+    "rememberMe": "Remember me",
+    "returnToLogin": "Return to Login"
   },
   "inventory": {
     "title": "Inventory",
@@ -155,7 +175,9 @@
   },
   "buttons": {
     "enable": "Enable",
-    "disable": "Disable"
+    "disable": "Disable",
+    "agree": "Agree",
+    "cancel": "Cancel"
   },
   "common": {
     "noData": "No data available",
@@ -181,5 +203,9 @@
       "satisfaction": "Satisfaction Rate",
       "uptime": "Uptime Guarantee"
     }
+  },
+  "termsPopup": {
+    "title": "Terms & Privacy Policy",
+    "description": "Please review and accept our Terms & Conditions and Privacy Policy before proceeding."
   }
 }
