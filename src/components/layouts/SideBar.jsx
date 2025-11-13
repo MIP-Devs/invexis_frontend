@@ -23,7 +23,7 @@ const navItems = [
   { title: "Sales", icon: <ShoppingBag size={22} />, path: "/inventory/sales" },
   { title: "Analytics", icon: <BarChart3 size={22} />, path: "/inventory/analytics" },
   { title: "Shops", icon: <Users size={22} />, path: "/inventory/companies" },
-  { title: "Billing & Payments", icon: <Package size={22} />, path: "/inventory/billing" },
+  { title: "Billing & Payments", icon: <Package size={22} />, path: "/inventory/payment" },
   { title: "Reports", icon: <FileSpreadsheet size={22} />, path: "/inventory/reports" },
 
   {

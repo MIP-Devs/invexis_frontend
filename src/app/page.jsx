@@ -6,6 +6,7 @@ import Lottie from "lottie-react";
 import { motion } from "framer-motion";
 import heroAnimation from "../../public/animations/Hero";
 
+
 export default function Navbar() {
   return (
     <div className="p-2 bg-white">
@@ -15,7 +16,7 @@ export default function Navbar() {
             {/* Logo */}
             <div className="flex items-center">
               <span className="text-2xl font-extrabold">
-                INVEX <span className="text-orange-500">Is</span>
+                INVEX<span className="text-orange-500">Is</span>
               </span>
             </div>
 
@@ -72,7 +73,7 @@ export default function Navbar() {
       </header>
 
       {/* Hero Section */}
-      <section className="flex flex-col-reverse md:flex-row items-center justify-between flex-1 px-6 py-10 md:px-12 lg:px-20 bg-orange-100">
+      <section className="flex flex-col-reverse md:flex-row items-center justify-between flex-1 px-6 py-10 md:px-1 lg:px-75 bg-orange-100">
         <motion.div
           className="max-w-lg space-y-6 md:mr-6" 
           initial={{ opacity: 0, x: -60 }}
