@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { HiLanguage } from "react-icons/hi2";
 import { MdLightMode, MdDarkMode } from "react-icons/md";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname  } from "next/navigation";
 import { useLocale } from "next-intl";
 import { toggleTheme, setLocale } from "@/features/settings/settingsSlice";
 import { selectTheme, selectLocale } from "@/features/settings/settingsSlice";

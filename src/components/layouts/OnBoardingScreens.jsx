@@ -25,7 +25,7 @@ export default function OnBoardingScreens({ steps }) {
 
   if (!mounted) {
     return (
-      <div className="w-screen h-screen flex items-center justify-center bg-white">
+      <div className="w-screen h-screen flex items-center justify-center bg-white dark:bg-[#1a1a1a]">
         <div className="flex flex-col md:flex-row w-3/4 h-1/2 space-y-6 md:space-y-0 md:space-x-6">
           <div className="flex-1 bg-gray-200 animate-pulse rounded-lg"></div>
           <div className="flex-1 space-y-4">
@@ -144,6 +144,3 @@ export default function OnBoardingScreens({ steps }) {
     </div>
   );
 }
-
-
-// d

@@ -184,14 +184,14 @@ export default function FormWrapper({
                 {t("agreeTo")}{" "}
                 <Link
                   href={`/${locale}/terms`}
-                  className="text-blue-600 hover:underline font-metropolis"
+                  className="text-blue-600 dark:text-blue-800 hover:underline font-metropolis"
                 >
                   {t("termsOfService")}
                 </Link>{" "}
                 {t("and")}{" "}
                 <Link
                   href={`/${locale}/privacy`}
-                  className="text-blue-600 hover:underline font-metropolis"
+                  className="text-blue-600 dark:text-blue-800 hover:underline font-metropolis"
                 >
                   {t("privacyPolicy")}
                 </Link>
@@ -303,7 +303,7 @@ export default function FormWrapper({
             <Link
               key={idx}
               href={link.href}
-              className="flex items-center justify-center text-blue-600 gap-2 hover:underline font-metropolis text-sm"
+              className="flex items-center justify-center text-blue-600 dark:text-blue-800 gap-2 hover:underline font-metropolis text-sm"
             >
               {link.icon && <span className="text-xl">{link.icon}</span>}
               {link.label}

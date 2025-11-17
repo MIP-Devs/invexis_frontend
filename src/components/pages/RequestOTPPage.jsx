@@ -32,10 +32,10 @@ export default function RequestOTPPage() {
   };
 
   return (
-    <div className="w-screen h-screen flex flex-col md:flex-row bg-white dark:bg-zinc-950">
+    <div className="w-screen h-screen flex flex-col md:flex-row bg-white dark:bg-[#1a1a1a]">
       <div className="w-full md:w-1/2 flex items-center justify-center bg-orange-100">
         <Image
-          src="/images/otp.png"
+          src="/images/8.png"
           alt="OTP Illustration"
           width={600}
           height={600}

@@ -36,7 +36,7 @@ export default function RequestResetPasswordPage() {
   };
 
   return (
-    <div className="w-screen h-screen flex text-sm flex-col md:flex-row bg-white">
+    <div className="w-screen h-screen flex text-sm flex-col md:flex-row bg-white dark:bg-[#1a1a1a]">
       <div className="w-full md:w-1/2 h-1/2 md:h-full flex items-center justify-center bg-gray-50 relative">
         <Image
           src="/images/7.png"

@@ -63,7 +63,7 @@ const LoginPage = () => {
 
     setSubmitting(true);
     try {
-      await dispatch(loginUser(identifier, password));
+      await dispatch(loginUser(identifier, password, locale));
       router.push(`/${locale}/inventory`);
     } catch (err) {
       setError(err.message || "Login failed");

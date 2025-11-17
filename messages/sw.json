@@ -17,6 +17,20 @@
   "welcome": {
     "title": "Karibu"
   },
+  "onboarding": {
+    "skip": "Ruka",
+    "back": "Rudi nyuma",
+    "next": "Mbele",
+    "getStarted": "Anza",
+    "welcomeTitle": "Karibu Invexis",
+    "welcomeDesc": "Dhibiti bidhaa, hisa na mauzo yote kwenye jukwaa moja.",
+    "smartTitle": "Hesabu & Mauzo ya Akili",
+    "smartDesc": "Fuatilia hisa zinazoingia/nje, toa ankara na uangalie ripoti.",
+    "rolesTitle": "Majukumu & Ushirikiano",
+    "rolesDesc": "Msimamizi Mkuu, Msimamizi wa Kampuni na Wafanyakazi — kila mtu ana jukumu lake.",
+    "growTitle": "Kuza Biashara Yako",
+    "growDesc": "Fungua e-commerce, maarifa ya AI na zana za masoko unapokua."
+  },
   "dashboard": {
     "title": "Dashibodi"
   },

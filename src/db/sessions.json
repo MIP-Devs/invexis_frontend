@@ -214,5 +214,13 @@
     "ip": "127.0.0.1",
     "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
     "country": "Rwanda"
+  },
+  {
+    "id": "s28",
+    "user_id": "u1",
+    "start_time": "2025-11-17T10:07:59.734Z",
+    "ip": "127.0.0.1",
+    "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "country": "Rwanda"
   }
 ]

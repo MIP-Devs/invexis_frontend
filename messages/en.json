@@ -17,6 +17,20 @@
   "welcome": {
     "title": "Welcome"
   },
+  "onboarding": {
+    "skip": "Skip",
+    "back": "Back",
+    "next": "Next",
+    "getStarted": "Get Started",
+    "welcomeTitle": "Welcome to Invexis",
+    "welcomeDesc": "Manage products, stock, and sales all in one platform.",
+    "smartTitle": "Smart Inventory & Sales",
+    "smartDesc": "Track stock in/out, generate invoices, and monitor reports.",
+    "rolesTitle": "Roles & Collaboration",
+    "rolesDesc": "Super Admin, Company Admin, and Workers — everyone has their role.",
+    "growTitle": "Grow Your Business",
+    "growDesc": "Unlock ecommerce, AI insights, and marketing tools as you scale."
+  },
   "dashboard": {
     "title": "Dashboard"
   },

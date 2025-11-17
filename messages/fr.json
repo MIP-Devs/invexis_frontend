@@ -17,6 +17,20 @@
   "welcome": {
     "title": "Bienvenue"
   },
+  "onboarding": {
+    "skip": "Passer",
+    "back": "Précédent",
+    "next": "Suivant",
+    "getStarted": "Commencer",
+    "welcomeTitle": "Bienvenue sur Invexis",
+    "welcomeDesc": "Gérez produits, stocks et ventes sur une seule plateforme.",
+    "smartTitle": "Inventaire & Ventes intelligents",
+    "smartDesc": "Suivez les entrées/sorties, générez des factures et surveillez les rapports.",
+    "rolesTitle": "Rôles & Collaboration",
+    "rolesDesc": "Super Admin, Admin Entreprise et Employés — chacun a son rôle.",
+    "growTitle": "Faites grandir votre entreprise",
+    "growDesc": "Débloquez l’e-commerce, l’IA et les outils marketing en grandissant."
+  },
   "dashboard": {
     "title": "Tableau de bord"
   },

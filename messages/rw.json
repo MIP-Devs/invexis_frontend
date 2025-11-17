@@ -17,6 +17,20 @@
   "welcome": {
     "title": "Murakaza neza"
   },
+  "onboarding": {
+    "skip": "Simbuka",
+    "back": "Garuka",
+    "next": "Komeza",
+    "getStarted": "Tangira",
+    "welcomeTitle": "Murakaza neza muri Invexis",
+    "welcomeDesc": "Cunga ibicuruzwa, imbiko, n'ubucuruzi byose kuri platform imwe.",
+    "smartTitle": "Ububiko & Ubucuruzi bw'Ubwenge",
+    "smartDesc": "Kurikirana imbiko zinjira/zasohotse, kora fagitire, kandi ukurikire raporo.",
+    "rolesTitle": "Imirimo & Ubufatanye",
+    "rolesDesc": "Super Admin, Umuyobozi w'Isosiyete, n'Abakozi — buri wese afite uruhare rwe.",
+    "growTitle": "Kura Ubucuruzi Bwawe",
+    "growDesc": "Fungura e-commerce, ibitekerezo bya AI, n'ibikoresho byo kwamamaza uko ukura."
+  },
   "dashboard": {
     "title": "Dashibodi"
   },

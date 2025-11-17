@@ -18,14 +18,14 @@ export default function VerifyOTPPage() {
   const [error, setError] = useState("");
 
   return (
-    <div className="w-screen h-screen flex flex-col md:flex-row bg-white dark:bg-zinc-950">
+    <div className="w-screen h-screen flex flex-col md:flex-row bg-white dark:bg-[#1a1a1a]">
       <div className="w-full md:w-1/2 flex items-center justify-center bg-orange-100">
         <Image
-          src="/images/verify.png"
+          src="/images/7.png"
           alt="Verify OTP Illustration"
           width={600}
           height={600}
-          className="object-contain hidden md:block md:max-h-[30%]"
+          className="object-contain hidden md:block md:max-h-[30%] lg:max-h-[50%]"
         />
       </div>
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-6 md:p-10">

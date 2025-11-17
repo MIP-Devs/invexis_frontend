@@ -1,38 +1,22 @@
-import OnBoardingScreens from "@/components/layouts/OnBoardingScreens"
-
-export const metadata = {
-    title: "Welcome"
-}
+// app/welcome/page.tsx  (or wherever it lives)
+import OnBoardingPage from "@/components/pages/OnboardingPage";
+import { useTranslations } from "next-intl";
 
 const steps = [
-  {
-    title: "Welcome to Invexis",
-    description: "Manage products, stock, and sales all in one platform.",
-    image: "/images/1.png",
-  },
-  {
-    title: "Smart Inventory & Sales",
-    description: "Track stock in/out, generate invoices, and monitor reports.",
-    image: "/images/2.png",
-  },
-  {
-    title: "Roles & Collaboration",
-    description: "Super Admin, Company Admin, and Workers — everyone has their role.",
-    image: "/images/3.png",
-  },
-  {
-    title: "Grow Your Business",
-    description: "Unlock ecommerce, AI insights, and marketing tools as you scale.",
-    image: "/images/4.png",
-  },
+  { key: "welcome", image: "/images/1.png" },
+  { key: "smart",   image: "/images/2.png" },
+  { key: "roles",   image: "/images/3.png" },
+  { key: "grow",    image: "/images/4.png" },
 ];
 
-const Welcome = () => {
-  return (
-      <section className="min-h-screen flex items-center justify-center text-sm">
-          <OnBoardingScreens steps={steps} />;
-    </section>
-  )
-}
+export const metadata = { title: "Welcome" };
 
-export default Welcome
+export default function Welcome() {
+  const t = useTranslations("onboarding");
+
+  return (
+    <section className="min-h-screen bg-white dark:bg-[#1a1a1a]">
+      <OnBoardingPage steps={steps.map(s => ({ ...s, title: t(s.key + "Title"), description: t(s.key + "Desc") }))} />
+    </section>
+  );
+}

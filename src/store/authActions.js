@@ -6,9 +6,9 @@ import companiesDB from "@/db/companies.json";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export const loginUser = (email, password) => async (dispatch) => {
+export const loginUser = (email, password, locale) => async (dispatch) => {
   try {
-    const res = await fetch("/auth/api/login", {
+    const res = await fetch(`/${locale}/auth/api/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -29,19 +29,19 @@ export const loginUser = (email, password) => async (dispatch) => {
   }
 };
 
-export const logoutUser = () => (dispatch) => {
+export const logoutUser = () => (dispatch, locale) => {
   dispatch(clearAuthSession());
   dispatch(clearSession());
   const router = useRouter()
   useEffect(() => {
-    router.push("/auth/login")
+    router.push(`/${locale}/auth/login`)
   })
 };
 
-export const updateUserSettings = (settings) => async (dispatch, getState) => {
+export const updateUserSettings = (settings, locale) => async (dispatch, getState) => {
   try {
     const { user, token } = getState().auth;
-    const res = await fetch("/auth/api/update-settings", {
+    const res = await fetch(`/${locale}/auth/api/update-settings`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
