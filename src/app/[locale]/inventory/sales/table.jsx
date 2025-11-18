@@ -1,4 +1,3 @@
-// filepath: d:\invexis\invexis_frontend\src\app\inventory\sales\table.jsx
 "use client";
 import { useRouter } from "next/navigation";
 import {Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,Toolbar,IconButton,Typography,TextField,Box,Menu,MenuItem,ListItemIcon,ListItemText,Popover,Select,InputLabel,FormControl,Dialog,DialogTitle,DialogContent,DialogActions,Button,
@@ -15,6 +14,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useState, useMemo, useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 const rows = [
   { id: 1, ProductName: "John Doe theBadman", Category: "Electronics", UnitPrice: 100, returned:"false", Discount: "20%", Date: "12/09/2024", TotalValue: 40, action: "more" },
@@ -293,6 +293,7 @@ const FilterPopover = ({ anchorEl, onClose, onFilterChange, currentFilter }) => 
 // ----------------------------------------------------------------------
 
 const DataTable = () => {
+  const t = useTranslations("sales");
   const navigation = useRouter();
   const [search, setSearch] = useState("");
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
@@ -403,7 +404,7 @@ const DataTable = () => {
         }}
       >
         <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-          Stock-Out History
+          {t("stockOutHistory")}
         </Typography>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
@@ -428,13 +429,13 @@ const DataTable = () => {
                     color: activeFilter.value ? 'black' : 'black',
                     filter: activeFilter.value ? 'drop-shadow(0 0 4px rgba(0, 123, 255, 0.4))' : 'none'}}
             />
-            <small className="font-bold text-black text-sm ">Filter</small>
+            <small className="font-bold text-black text-sm ">{t('filter')}</small>
           </IconButton>
 
           <IconButton sx={{bgcolor:"none"}} className="space-x-3"  >
             <CloudDownloadRoundedIcon
             sx={{ padding:"2px", color: "black" }}  />
-            <small className="font-bold text-black text-sm ">Export</small>
+            <small className="font-bold text-black text-sm ">{t('export')}</small>
           </IconButton>
         </Box>
       </Toolbar>
@@ -443,15 +444,42 @@ const DataTable = () => {
         <Table stickyHeader>
           <TableHead>
             <TableRow sx={{ backgroundColor: "#1976d2" }}>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Sale</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Product Name</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Category</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Unit Price (FRW)</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Returned</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Discount</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Date</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Total Value</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Actions</TableCell>
+              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>
+  {t("sale")}
+</TableCell>
+
+<TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>
+  {t("productName")}
+</TableCell>
+
+<TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>
+  {t("category")}
+</TableCell>
+
+<TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>
+  {t("unitPrice")} (FRW)
+</TableCell>
+
+<TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>
+  {t("Returned")}
+</TableCell>
+
+<TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>
+  {t("Discount")}
+</TableCell>
+
+<TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>
+  {t("date")}
+</TableCell>
+
+<TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>
+  {t("totalValue")}
+</TableCell>
+
+<TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>
+  {t("action")}
+</TableCell>
+
             </TableRow>
           </TableHead>
 

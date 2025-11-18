@@ -221,5 +221,24 @@
   "termsPopup": {
     "title": "Conditions générales et politique de confidentialité",
     "description": "Veuillez consulter et accepter nos Conditions générales et notre Politique de confidentialité avant de continuer."
+  },
+  "sales":{
+    "title":"Gérer et suivre tous les enregistrements de ventes",
+    "dashboard":"Tableau de bord",
+    "products":"Produits",
+    "list":"Liste",
+    "stockOut":"Sortie de stock",
+    "stockOutHistory":"Historique des sorties de stock",
+    "filter":"filtre",
+    "export": "Exporter",
+  "sale": "Vente",
+  "productName": "Nom du produit",
+  "category": "Catégorie",
+  "unitPrice": "Prix unitaire",
+  "Returned": "Retourné",
+  "Discount": "Remise",
+  "date": "Date",
+  "totalValue": "Valeur totale",
+  "action": "Action"
   }
 }

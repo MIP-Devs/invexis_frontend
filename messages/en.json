@@ -221,5 +221,24 @@
   "termsPopup": {
     "title": "Terms & Privacy Policy",
     "description": "Please review and accept our Terms & Conditions and Privacy Policy before proceeding."
+  },
+  "sales":{
+    "title":"Manage and Track All Sales Records",
+    "dashboard":"Dashboard",
+    "products":"Products",
+    "list":"List",
+    "stockOut":"Stock Out",
+    "stockOutHistory":"Stock-Out History",
+    "filter":"filter",
+    "export":"Export",
+    "sale":"Sale",
+    "productName":"Product Name",
+    "category":"Category",
+    "unitPrice":"Unit Price",
+    "Returned":"Returned",
+    "Discount":"Discount",
+    "date":"Date",
+    "totalValue":"Total Value",
+    "action":"Action"
   }
 }
