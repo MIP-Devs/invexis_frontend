@@ -239,6 +239,23 @@
     "Discount":"Discount",
     "date":"Date",
     "totalValue":"Total Value",
-    "action":"Action"
-  }
+    "action":"Action",
+    "saleProducts":"Stock Out Product",
+    "saleSubTitile":"Record details for products leaving the store or warehouse",
+    "back": "Back",
+    "Edit": "Edit",
+    "Delete": "Delete",
+    "view": "View More"
+  },
+  "reciept":{
+  "quantitySold": "Quantity Sold",
+  "soldPrice": "Sold Price (RwF)",
+  "discount": "Discount",
+  "soldDate": "Sold Date",
+  "isReturned": "Is Returned",
+  "warranty": "Warranty",
+  "buyerDetails": "Buyer Details",
+  "buyer": "Buyer",
+  "buyerPhoneNumber": "Buyer Phone Number"
+}
 }

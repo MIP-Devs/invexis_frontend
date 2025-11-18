@@ -44,6 +44,7 @@ const ConfirmDialog = ({ open, title, message, onConfirm, onCancel }) => (
 const RowActionsMenu = ({ rowId, onRedirect, onDeleteRequest }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const t = useTranslations("sales");
 
   const handleClick = (event) => {
     event.stopPropagation();
@@ -116,15 +117,15 @@ const RowActionsMenu = ({ rowId, onRedirect, onDeleteRequest }) => {
       >
         <MenuItem onClick={handleView}>
           <ListItemIcon><VisibilityIcon sx={{ color: "#333" }} /></ListItemIcon>
-          <ListItemText primary="View" />
+          <ListItemText primary={`${t('view')}`} />
         </MenuItem>
         <MenuItem onClick={handleEdit}>
           <ListItemIcon><EditIcon sx={{ color: "#333" }} /></ListItemIcon>
-          <ListItemText primary="Edit" />
+          <ListItemText primary={`${t('Edit')}`} />
         </MenuItem>
         <MenuItem onClick={handleDelete} sx={{ color: "error.main" }}>
           <ListItemIcon><DeleteIcon sx={{ color: "error.main" }} /></ListItemIcon>
-          <ListItemText primary="Delete" />
+          <ListItemText primary={`${t('Delete')}`}  />
         </MenuItem>
       </Menu>
     </>

@@ -2,12 +2,15 @@ import React from 'react';
 import Image from 'next/image'; 
 import { Edit , Download } from "@mui/icons-material"
 import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
+import { useLocale } from 'next-intl';
 
 const LeftSide = ({saleOverView}) => {
     const navigate = useRouter()
-
+    const t = useTranslation('reciept')
+    const locale = useLocale()
     const moreDetails = [
-        { label: "Quantity Sold", value: saleOverView.quantity },
+        { label: "Quantity Sold", value: saleOverView.quantity },                               
         { label: "Sold Price (RwF)", value: saleOverView.price },
         { label: "Discount", value: `${saleOverView.discount}%` },
         { label: "Sold Date", value: saleOverView.soldDate },
@@ -35,7 +38,7 @@ return (
                 className='px-4 cursor-pointer py-2 ring ring-gray-200 rounded-xl hover:bg-orange-400 hover:text-white transition-all'>
                 <Download /> Print</button>
                 <button 
-                onClick={()=>{navigate.push(`/inventory/sales/${saleOverView.id}/${saleOverView.id}`)}}
+                onClick={()=>{navigate.push(`/${locale}/inventory/sales/${saleOverView.id}/${saleOverView.id}`)}}
                 className='px-4 cursor-pointer py-2 ring ring-gray-200 rounded-xl hover:bg-orange-400 hover:text-white transition-all '><Edit />Edit </button>
             </div>
        </div>

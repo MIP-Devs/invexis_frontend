@@ -239,6 +239,24 @@
   "Discount": "Remise",
   "date": "Date",
   "totalValue": "Valeur totale",
-  "action": "Action"
+  "action": "Action",
+  "saleProducts": "Sortie de Produit du Stock",
+  "saleSubTitile": "Enregistrer les détails des produits quittant le magasin ou l'entrepôt",
+  "back": "Retour",
+  "Edit": "Modifier",
+  "Delete": "Supprimer",
+  "view": "Voir Plus",
+  
+  "reciept":{
+  "quantitySold": "Quantité Vendue",
+  "soldPrice": "Prix de Vente (RwF)",
+  "discount": "Remise",
+  "soldDate": "Date de Vente",
+  "isReturned": "Retourné ?",
+  "warranty": "Garantie",
+  "buyerDetails": "Détails de l'Acheteur",
+  "buyer": "Acheteur",
+  "buyerPhoneNumber": "Numéro de Téléphone de l'Acheteur"
+}
   }
 }

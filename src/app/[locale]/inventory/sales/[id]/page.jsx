@@ -3,9 +3,10 @@ import { useState, useEffect } from "react";
 import ProductDes from "./productdes";
 import { useRouter } from 'next/navigation';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-
+import { useTranslations } from "next-intl";
 
 const OrderDetails = () => {
+  const t = useTranslations("sales");
   const productInfo = {
     id: "P-001",
     discount:0,
@@ -30,7 +31,7 @@ const OrderDetails = () => {
     <>
     <section className="space-y-10">
      <div className="">
-      <button className="flex cursor-pointer items-center text-xl space-x-3" onClick={()=>{navigate.back()}}><ArrowBackIcon /><span>Sales</span></button>
+      <button className="flex cursor-pointer items-center text-xl space-x-3" onClick={()=>{navigate.back()}}><ArrowBackIcon /><span>{t('back')}</span></button>
      </div>
 
      <div className="flex">
