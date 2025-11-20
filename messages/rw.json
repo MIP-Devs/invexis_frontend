@@ -221,5 +221,60 @@
   "termsPopup": {
     "title": "Amategeko & Itegeko ry'Ibanga",
     "description": "Nyamuneka soma kandi wemere Amategeko yacu & Amabwiriza hamwe Itegeko ry'Ibanga mbere yo kuendelea."
+  },
+  "sales":{
+    "title":"Cunga kandi Ukurikirane Amakuru yose y'Ubucuruzi",
+    "dashboard":"Dashibodi",
+    "products":"Ibicuruzwa",
+    "list":"Urutonde",
+    "stockOut":"Gusohora Imbiko",
+    "stockOutHistory":"Amateka yo Gusohora Imbiko",
+    "filter":"Akayunguruzo",
+  "export": "Kohereza hanze",
+  "sale": "Gucuruza",
+  "productName": "Izina ry'ibicuruzwa",
+  "category": "Icyiciro",
+  "unitPrice": "Igiciro kuri buri kimwe",
+  "Returned": "Byasubijwe",
+  "Discount": "Igabanyabiciro",
+  "date": "Itariki",
+  "totalValue": "Agaciro k'ibicuruzwa byose",
+  "action": "Igikorwa",
+  "saleProducts": "Gusohora Ibicuruzwa muri Stok",
+  "saleSubTitile": "Andika ibisobanuro by'ibicuruzwa bisohoka mu iduka cyangwa mu bubiko",
+  "back": "Subira inyuma",
+  "Edit": "Hindura",
+  "Delete": "Siba",
+  "view": "Reba Byinshi"
+  },
+  "reciept":{
+  "quantitySold": "Umubare Wacurujwe",
+  "soldPrice": "Igiciro Cyacurujwe (RwF)",
+  "discount": "Igabanyabiciro",
+  "soldDate": "Itariki Yacurujweho",
+  "isReturned": "Byasubijwe?",
+  "warranty": "Icyemezo cya garanti",
+  "buyerDetails": "Amakuru Y’umuguzi",
+  "buyer": "Umuguzi",
+  "buyerPhoneNumber": "Numero y’Umuguzi",
+  "print": "Sohora dokima",
+  "edit": "Hindura"
+  },
+  "updateProduct": {
+    "pageTitle": "Hindura igurishwa",
+    "pageSubtitle": "Emeza amakuru y’iki igurishwa harimo iby’ikigurishijwe, uburyo bwishyurwa n’amakuru y’umuguzi.",
+    "sectionCustomer": "Amakuru y’umuguzi",
+    "updateButton": "Emeza igurishwa",
+    "cancelButton": "Bireke",
+    "productName": "Izina ry’ikigurishijwe",
+    "category": "Itsinda",
+    "quantity": "Ingano",
+    "sellingPrice": "Igiciro cyo kugurisha",
+    "discount": "Kugabanyirizwa",
+    "customerName": "Amazina y’umuguzi",
+    "customerContact": "Telefone y’umuguzi",
+    "paymentMethod": "Uburyo bw’ishyura",
+    "customerInformation": "Amakuru y'Umukiriya"
   }
+
 }

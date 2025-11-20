@@ -1,508 +1,317 @@
 "use client";
-import { useRouter } from "next/navigation";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Toolbar,
-  IconButton,
-  Typography,
-  TextField,
-  Box,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-  Popover,
-  Select,
-  InputLabel,
-  FormControl,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-} from "@mui/material";
 
+import { useRouter } from "next/navigation";
+import {Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,Toolbar,IconButton,Typography,TextField,Box,Menu,MenuItem,ListItemIcon,ListItemText,Popover,Select,InputLabel,FormControl,CircularProgress,Chip,} from "@mui/material";
 import FilterAltRoundedIcon from "@mui/icons-material/FilterAltRounded";
 import SearchIcon from "@mui/icons-material/Search";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import LocalOfferIcon from '@mui/icons-material/LocalOffer'; // Using this for 'Sale' icon
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { Button } from "@/components/shared/button";
 import { useState, useMemo, useEffect } from "react";
+import { getAllProducts } from "@/services/salesService"; // Make sure this path is correct
+import { useLocale } from "next-intl";
 
-// --- UPDATED SAMPLE DATA ---
-const rows = [
-  { id: 1, ProductId: "PROD001", ProductName: "Gaming Laptop X", Category: "Electronics", Quantity: 15, Price: 1200, action: "more" },
-  { id: 2, ProductId: "PROD002", ProductName: "Office Chair Pro", Category: "Furniture", Quantity: 50, Price: 250, action: "more" },
-  { id: 3, ProductId: "PROD003", ProductName: "Cotton T-shirt", Category: "Apparel", Quantity: 200, Price: 25, action: "more" },
-  { id: 4, ProductId: "PROD004", ProductName: "4K Monitor 32'", Category: "Electronics", Quantity: 8, Price: 450, action: "more" },
-  { id: 5, ProductId: "PROD005", ProductName: "Desk Lamp LED", Category: "Home Goods", Quantity: 110, Price: 40, action: "more" },
-  { id: 6, ProductId: "PROD006", ProductName: "Running Shoes", Category: "Apparel", Quantity: 75, Price: 85, action: "more" },
-];
-// ----------------------------
-
-// Small local confirmation dialog (Kept but not used in the new RowActionsMenu)
-const ConfirmDialog = ({ open, title, message, onConfirm, onCancel }) => (
-  <Dialog open={open} onClose={onCancel}>
-    <DialogTitle>{title || "Confirm"}</DialogTitle>
-    <DialogContent>
-      <Typography>{message || "Are you sure?"}</Typography>
-    </DialogContent>
-    <DialogActions>
-      <Button onClick={onCancel} color="primary" variant="outlined">Cancel</Button>
-      <Button onClick={onConfirm} color="error" variant="contained">Delete</Button>
-    </DialogActions>
-  </Dialog>
-);
-
-// Custom Component for the Action Menu (RowActionsMenu)
-// Modified to only show 'Sale' and 'View'
-const RowActionsMenu = ({ rowId, onRedirect, onSale }) => {
+// Row Actions Menu (Sale + View)
+const RowActionsMenu = ({ productId }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const router = useRouter();
+  const locale = useLocale();
 
-  const handleClick = (event) => {
-    event.stopPropagation();
-    setAnchorEl(event.currentTarget);
+  const handleClick = (e) => {
+    e.stopPropagation();
+    setAnchorEl(e.currentTarget);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleClose = () => setAnchorEl(null);
+
+  const handleSale = (e) => {
+    e.stopPropagation();
+    router.push(`/${locale}/inventory/sales/sellProduct/sale/${productId}`);
   };
 
-  // 'View' action - kept original logic
-  const handleView = (event) => {
-    event.stopPropagation();
-    navigate.push(`/inventory/sales/`);
-    handleClose();
-  };
-
-  const navigate = useRouter();
-  // 'Sale' action - Maps to the original 'Edit' route
-  const handleSale = (event) => {
-    event.stopPropagation();
-    navigate.push(`/inventory/sales/sellProduct/sale/${rowId}`)
-    handleClose();
+  const handleView = (e) => {
+    e.stopPropagation();
+    router.push(`/${locale}/inventory/products/${productId}`);
   };
 
   return (
     <>
-      <IconButton
-        aria-label="more"
-        aria-controls={open ? "long-menu" : undefined}
-        aria-expanded={open ? "true" : undefined}
-        aria-haspopup="true"
-        onClick={handleClick}
-        size="small"
-      >
+      <IconButton onClick={handleClick} size="small">
         <MoreVertIcon />
       </IconButton>
-      <Menu
-        id="long-menu"
-        MenuListProps={{
-          "aria-labelledby": "long-button",
-          sx: {
-            padding: 0,
-            "& .MuiMenuItem-root": {
-              paddingY: 1,
-            },
-          },
-        }}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        PaperProps={{
-          sx: {
-            backgroundColor: "#ffffff",
-            color: "#333",
-            minWidth: 160,
-            borderRadius: 2,
-            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05)",
-          },
-        }}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        {/* Sale Button */}
+      <Menu anchorEl={anchorEl} open={open} onClose={handleClose} PaperProps={{ sx: { mt: 1 } }}>
         <MenuItem onClick={handleSale}>
-          <ListItemIcon><LocalOfferIcon sx={{ color: "#333" }} /></ListItemIcon>
-          <ListItemText primary="Sale" />
+          <ListItemIcon><LocalOfferIcon fontSize="small" /></ListItemIcon>
+          <ListItemText>Sale</ListItemText>
         </MenuItem>
-        {/* View Button */}
         <MenuItem onClick={handleView}>
-          <ListItemIcon><VisibilityIcon sx={{ color: "#333" }} /></ListItemIcon>
-          <ListItemText primary="View" />
+          <ListItemIcon><VisibilityIcon fontSize="small" /></ListItemIcon>
+          <ListItemText>View</ListItemText>
         </MenuItem>
       </Menu>
     </>
   );
 };
 
-// ----------------------------------------------------------------------
-// Custom Component for the Filter Popover (FilterPopover)
-// ----------------------------------------------------------------------
+// Filter Popover (Category & Price)
+const FilterPopover = ({ anchorEl, onClose, onApply, currentFilter }) => {
+  const [tempFilter, setTempFilter] = useState(currentFilter);
 
-const FilterPopover = ({ anchorEl, onClose, onFilterChange, currentFilter }) => {
-  const open = Boolean(anchorEl);
-  const [filterCriteria, setFilterCriteria] = useState(currentFilter);
-
-  useEffect(() => {
-    // Only update if the prop changes to prevent local state overwrite during local changes
-    if (JSON.stringify(currentFilter) !== JSON.stringify(filterCriteria)) {
-      setFilterCriteria(currentFilter);
-    }
-  }, [currentFilter]);
-
-  const uniqueCategories = useMemo(() => {
-    const categories = rows.map(row => row.Category);
-    return ["", ...new Set(categories)];
-  }, []);
-
-  const availableColumns = [
-    { label: 'Category', value: 'Category', type: 'text' },
-    { label: 'Price (FRW)', value: 'Price', type: 'number' },
-  ];
-
-  const getOperators = (columnType) => {
-    if (columnType === 'number') {
-      return [
-        { label: 'is greater than', value: '>' },
-        { label: 'is less than', value: '<' },
-        { label: 'equals', value: '==' },
-      ];
-    }
-    return [
-      { label: 'contains', value: 'contains' },
-      { label: 'equals', value: '==' },
-    ];
-  };
-
-  const handleSelectChange = (event) => {
-    const { name, value } = event.target;
-    let newCriteria = { ...filterCriteria, [name]: value };
-
-    if (name === 'column') {
-      const newColumnType = availableColumns.find(col => col.value === value)?.type || 'text';
-      // Reset operator and value when changing column type
-      newCriteria = {
-        ...newCriteria,
-        operator: getOperators(newColumnType)[0].value,
-        value: '',
-      };
-    }
-
-    setFilterCriteria(newCriteria);
-    onFilterChange(newCriteria);
-  };
-
-  const handleValueChange = (event) => {
-    const { value } = event.target;
-    const newCriteria = { ...filterCriteria, value };
-
-    setFilterCriteria(newCriteria);
-    onFilterChange(newCriteria);
-  };
-
-  const handleClearFilter = () => {
-    // Reset to default Category filter, as Category is a good default for text
-    const defaultFilter = { column: 'Category', operator: 'contains', value: '' };
-    onFilterChange(defaultFilter);
-    setFilterCriteria(defaultFilter);
+  const handleApply = () => {
+    onApply(tempFilter);
     onClose();
   };
 
-  const selectedColumnType = availableColumns.find(
-    col => col.value === filterCriteria.column
-  )?.type || 'text';
+  const handleClear = () => {
+    setTempFilter({ column: "Category", operator: "contains", value: "" });
+    onApply({ column: "Category", operator: "contains", value: "" });
+    onClose();
+  };
 
   return (
-    <>
     <Popover
-      open={open}
+      open={Boolean(anchorEl)}
       anchorEl={anchorEl}
       onClose={onClose}
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-      transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-      PaperProps={{
-        sx: {
-          padding: 2,
-          borderRadius: 2,
-          boxShadow: '0 8px 32px 0 rgba(0,0,0,0.1)',
-          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(240, 248, 255, 0.8))',
-          backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255, 255, 255, 0.18)',
-          minWidth: 550,
-          display: 'flex',
-          alignItems: 'center',
-          gap: 2,
-          mt: 1,
-        }
-      }}
+      anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      transformOrigin={{ vertical: "top", horizontal: "left" }}
+      PaperProps={{ sx: { p: 3, borderRadius: 2, minWidth: 400 } }}
     >
-      <IconButton onClick={handleClearFilter} size="small" sx={{ position: 'absolute', top: 8, right: 8, left: 'auto' }}>
-        <CloseIcon />
-      </IconButton>
-      <Typography variant="subtitle1" sx={{ mt: 3, fontWeight: 'bold' }}>Filter By:</Typography>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+        <Typography variant="h6">Filter Products</Typography>
+        <IconButton onClick={handleClear} size="small"><CloseIcon /></IconButton>
+      </Box>
 
-      <FormControl variant="outlined" size="small" sx={{ minWidth: 150, mt: 3 }}>
-        <InputLabel>Columns</InputLabel>
-        <Select
-          label="Columns"
-          name="column"
-          value={filterCriteria.column}
-          onChange={handleSelectChange}
-        >
-          {availableColumns.map(col => (
-            <MenuItem key={col.value} value={col.value}>{col.label}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <Box sx={{ display: "flex", gap: 2, flexDirection: "column" }}>
+        <FormControl size="small">
+          <InputLabel>Column</InputLabel>
+          <Select
+            value={tempFilter.column}
+            label="Column"
+            onChange={(e) => setTempFilter({ ...tempFilter, column: e.target.value, value: "" })}
+          >
+            <MenuItem value="Category">Category</MenuItem>
+            <MenuItem value="Price">Price (FRW)</MenuItem>
+          </Select>
+        </FormControl>
 
-      <FormControl variant="outlined" size="small" sx={{ minWidth: 150, mt: 3 }}>
-        <InputLabel>Operator</InputLabel>
-        <Select
-          label="Operator"
-          name="operator"
-          value={filterCriteria.operator}
-          onChange={handleSelectChange}
-        >
-          {getOperators(selectedColumnType).map(op => (
-            <MenuItem key={op.value} value={op.value}>{op.label}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-
-      <FormControl variant="outlined" size="small" sx={{ flexGrow: 1, minWidth: 160, mt: 3 }}>
-        <InputLabel>{selectedColumnType === 'number' ? 'Filter amount' : 'Filter value'}</InputLabel>
-        {selectedColumnType === 'number' ? (
+        {tempFilter.column === "Price" ? (
+          <>
+            <FormControl size="small">
+              <InputLabel>Operator</InputLabel>
+              <Select
+                value={tempFilter.operator}
+                label="Operator"
+                onChange={(e) => setTempFilter({ ...tempFilter, operator: e.target.value })}
+              >
+                <MenuItem value=">">Greater than</MenuItem>
+                <MenuItem value="<">Less than</MenuItem>
+                <MenuItem value="==">Equals</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              size="small"
+              label="Amount"
+              type="number"
+              value={tempFilter.value}
+              onChange={(e) => setTempFilter({ ...tempFilter, value: e.target.value })}
+            />
+          </>
+        ) : (
           <TextField
             size="small"
-            variant="outlined"
-            name="value"
-            value={filterCriteria.value}
-            onChange={handleValueChange}
-            type="number"
-            InputLabelProps={{ shrink: true }}
-            label="Filter amount"
+            label="Search in Category"
+            value={tempFilter.value}
+            onChange={(e) => setTempFilter({ ...tempFilter, value: e.target.value })}
+            placeholder="e.g. Electronics"
           />
-        ) : (
-          <Select
-            label="Filter value"
-            name="value"
-            value={filterCriteria.value}
-            onChange={handleValueChange}
-          >
-            {uniqueCategories.map(cat => (
-              <MenuItem key={cat} value={cat}>{cat || "All Categories"}</MenuItem>
-            ))}
-          </Select>
         )}
-      </FormControl>
+
+        <Box sx={{ display: "flex", gap: 1, mt: "auto" }}>
+          <Button variant="outlined" onClick={onClose}>Cancel</Button>
+          <Button variant="contained" onClick={handleApply}>Apply Filter</Button>
+        </Box>
+      </Box>
     </Popover>
-    </>
   );
 };
 
-// ----------------------------------------------------------------------
-// Main DataTable Component
-// ----------------------------------------------------------------------
-
+// Main Component
 const CurrentInventory = () => {
-  const navigation = useRouter();
+  const router = useRouter();
   const [search, setSearch] = useState("");
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
-
   const [activeFilter, setActiveFilter] = useState({
-    column: 'Category', // Default filter column
-    operator: 'contains',
-    value: '',
+    column: "Category",
+    operator: "contains",
+    value: "",
   });
 
-  // Delete modal state and logic (Kept for structure, not used by current menu)
-  const [deleteModal, setDeleteModal] = useState({ open: false, id: null });
-  const toggleDeleteModalFor = (id) => (open) => { setDeleteModal({ open: Boolean(open), id: open ? id : null }); };
-  const handleConfirmDelete = () => { console.log("Confirmed delete for id:", deleteModal.id); setDeleteModal({ open: false, id: null }); };
-  const handleCancelDelete = () => { setDeleteModal({ open: false, id: null }); };
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  // Fetch real products
+  useEffect(() => {
+    const loadProducts = async () => {
+      setLoading(true);
+      const data = await getAllProducts();
+      setProducts(data);
+      setLoading(false);
+    };
+    loadProducts();
+  }, []);
 
-  const handleRedirectToSlug = (id) => {
-    navigation.push(`/inventory/products/${id}`); // Adjusted to product view
-  };
+  // Filter + Search Logic
+  const filteredProducts = useMemo(() => {
+    let result = products;
 
-  const handleOpenFilter = (event) => {
-    setFilterAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseFilter = () => {
-    setFilterAnchorEl(null);
-  };
-
-  const handleFilterChange = (newFilter) => {
-    setActiveFilter(newFilter);
-  };
-
-  const filteredRows = useMemo(() => {
-    let currentRows = rows;
-
-    // Search on Product Name or ID
+    // Search
     if (search) {
-      const lowerCaseSearch = search.toLowerCase();
-      currentRows = currentRows.filter((row) =>
-        row.ProductName.toLowerCase().includes(lowerCaseSearch) ||
-        row.ProductId.toLowerCase().includes(lowerCaseSearch)
+      const term = search.toLowerCase();
+      result = result.filter(p =>
+        p.ProductName.toLowerCase().includes(term) ||
+        p.ProductId.toLowerCase().includes(term)
       );
     }
 
-    const { column, operator, value } = activeFilter;
-
-    if (column && value) {
-      if (column === 'Price') {
-        const numValue = Number(value);
-        if (isNaN(numValue)) return currentRows;
-
-        currentRows = currentRows.filter((row) => {
-          const rowPrice = row.Price;
-          if (operator === '>') return rowPrice > numValue;
-          if (operator === '<') return rowPrice < numValue;
-          if (operator === '==') return rowPrice === numValue;
+    // Advanced Filter
+    if (activeFilter.value) {
+      if (activeFilter.column === "Price") {
+        const val = Number(activeFilter.value);
+        result = result.filter(p => {
+          if (activeFilter.operator === ">") return p.Price > val;
+          if (activeFilter.operator === "<") return p.Price < val;
+          if (activeFilter.operator === "==") return p.Price === val;
           return true;
         });
-
-      } else if (column === 'Category') {
-        currentRows = currentRows.filter((row) => {
-          const rowValue = String(row[column]).toLowerCase();
-          const filterValue = String(value).toLowerCase();
-
-          if (operator === 'contains') return rowValue.includes(filterValue);
-          if (operator === '==') return rowValue === filterValue;
-          return true;
-        });
+      } else if (activeFilter.column === "Category") {
+        result = result.filter(p =>
+          p.Category.toLowerCase().includes(activeFilter.value.toLowerCase())
+        );
       }
     }
 
-    return currentRows;
-  }, [search, activeFilter]);
+    return result;
+  }, [products, search, activeFilter]);
+
+  const handleRowClick = (id) => {
+    router.push(`/inventory/products/${id}`);
+  };
 
   return (
-    <>
     <section>
-    <Paper sx={{ width: "100%", overflowY: "auto", boxShadow: "none", background: "transparent" }}>
-      <FilterPopover
-        anchorEl={filterAnchorEl}
-        onClose={handleCloseFilter}
-        onFilterChange={handleFilterChange}
-        currentFilter={activeFilter}
-      />
+      <Paper sx={{ width: "100%", overflow: "hidden", boxShadow: "none", background: "transparent" }}>
+        {/* Filter Popover */}
+        <FilterPopover
+          anchorEl={filterAnchorEl}
+          onClose={() => setFilterAnchorEl(null)}
+          onApply={setActiveFilter}
+          currentFilter={activeFilter}
+        />
 
-      <ConfirmDialog
-        open={deleteModal.open}
-        title="Delete sale"
-        message={deleteModal.id ? `Are you sure you want to delete sale #${deleteModal.id}?` : "Are you sure?"}
-        onConfirm={handleConfirmDelete}
-        onCancel={handleCancelDelete}
-      />
+        {/* Toolbar */}
+        <Toolbar sx={{ justifyContent: "space-between", borderBottom: "1px solid #eee", py: 2 }}>
+          <Typography variant="h5" fontWeight="bold">
+            Inventory Stock {products.length > 0 && `(${filteredProducts.length})`}
+          </Typography>
 
-      <Toolbar
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          borderBottom: "1px solid #ddd",
-        }}
-      >
-        <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-          Inventory Stock
-        </Typography>
-
-        <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
-          {/* Search */}
-          <TextField
-            size="small"
-            variant="outlined"
-            placeholder="Search ID or Name…"
-            sx={{ border: "2px orange solid", borderRadius: 2 }}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            InputProps={{
-              startAdornment: <SearchIcon sx={{ mr: 1, color: "gray" }} />,
-            }}
-          />
-
-          {/* Filter */}
-          <IconButton onClick={handleOpenFilter} variant="contained"  >
-            <FilterAltRoundedIcon
-              sx={{
-                borderRadius: "6px",
-                height: "30px",
-                padding: "2px",
-                color: activeFilter.value ? 'black' : 'black',
-                filter: activeFilter.value ? 'drop-shadow(0 0 4px rgba(0, 123, 255, 0.4))' : 'none'
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <TextField
+              size="small"
+              placeholder="Search by name or SKU..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              InputProps={{
+                startAdornment: <SearchIcon sx={{ mr: 1, color: "gray" }} />,
               }}
+              sx={{ width: 300, "& .MuiOutlinedInput-root": { borderRadius: 3 } }}
             />
-            <small className="font-bold text-black text-sm ">Filter</small>
-          </IconButton>
 
-          {/* Designs/Settings button */}
-          <IconButton sx={{ bgcolor: "none" }} className="space-x-3" >
-            <SettingsIcon
-              sx={{ padding: "2px", color: "black" }} />
-            <small className="font-bold text-black text-sm ">Designs</small>
-          </IconButton>
-        </Box>
-      </Toolbar>
+            <IconButton
+              onClick={(e) => setFilterAnchorEl(e.currentTarget)}
+              color={activeFilter.value ? "primary" : "default"}
+            >
+              <FilterAltRoundedIcon />
+              {activeFilter.value && <Chip label="1" size="small" color="primary" sx={{ ml: 1, height: 18 }} />}
+            </IconButton>
 
-      <TableContainer sx={{ maxHeight: 600 }}>
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow sx={{ backgroundColor: "#1976d2" }}>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Product Id</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Product Name</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Category</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Quantity in Stock</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Price (FRW)</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Actions</TableCell>
-            </TableRow>
-          </TableHead>
+            <IconButton>
+              <SettingsIcon />
+            </IconButton>
+          </Box>
+        </Toolbar>
 
-          <TableBody>
-            {filteredRows.map((row) => (
-              <TableRow
-                key={row.id}
-                hover
-                sx={{
-                  cursor: "default",
-                  "&:hover": { backgroundColor: "#f5f5f5" },
-                }}
-              >
-                <TableCell>{row.ProductId}</TableCell>
-                <TableCell>{row.ProductName}</TableCell>
-                <TableCell>{row.Category}</TableCell>
-                <TableCell>{row.Quantity}</TableCell>
-                <TableCell>{row.Price}</TableCell>
-                <TableCell>
-                  <RowActionsMenu
-                    rowId={row.id}
-                    onRedirect={handleRedirectToSlug}
-                  />
-                </TableCell>
+        {/* Table */}
+        <TableContainer sx={{ maxHeight: "calc(100vh - 250px)" }}>
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow sx={{ backgroundColor: "#0d47a1" }}>
+                {["Product ID", "Product Name", "Category", "Stock", "Price (FRW)", "Actions"].map((h) => (
+                  <TableCell key={h} sx={{ color: "white", fontWeight: "bold", fontSize: "0.95rem" }}>
+                    {h}
+                  </TableCell>
+                ))}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Paper>
+            </TableHead>
+
+            <TableBody>
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={6} align="center" sx={{ py: 10 }}>
+                    <CircularProgress />
+                    <Typography sx={{ mt: 2 }}>Loading inventory...</Typography>
+                  </TableCell>
+                </TableRow>
+              ) : filteredProducts.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={6} align="center" sx={{ py: 10, color: "gray" }}>
+                    <Typography variant="h6">No products found</Typography>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredProducts.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    hover
+                    onClick={() => handleRowClick(row.id)}
+                    sx={{
+                      cursor: "pointer",
+                      "&:hover": { backgroundColor: "#f0f8ff" },
+                    }}
+                  >
+                    <TableCell><strong>{row.ProductId}</strong></TableCell>
+                    <TableCell>{row.ProductName}</TableCell>
+                    <TableCell>{row.brand}</TableCell>
+                    <TableCell>{row.manufacturer}</TableCell>
+                    <TableCell>
+                      <Chip label={row.Category} size="small" color="primary" variant="outlined" />
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label={row.Quantity}
+                        color={row.Quantity < 10 ? "error" : row.Quantity < 30 ? "warning" : "success"}
+                        size="small"
+                      />
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>
+                      {row.Price.toLocaleString()} FRW
+                    </TableCell>
+                    <TableCell onClick={(e) => e.stopPropagation()}>
+                      <RowActionsMenu productId={row.id} />
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
     </section>
-    </>
   );
 };
+
 export default CurrentInventory;
-
-
-
-

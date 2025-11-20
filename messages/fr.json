@@ -221,5 +221,62 @@
   "termsPopup": {
     "title": "Conditions générales et politique de confidentialité",
     "description": "Veuillez consulter et accepter nos Conditions générales et notre Politique de confidentialité avant de continuer."
+  },
+  "sales":{
+    "title":"Gérer et suivre tous les enregistrements de ventes",
+    "dashboard":"Tableau de bord",
+    "products":"Produits",
+    "list":"Liste",
+    "stockOut":"Sortie de stock",
+    "stockOutHistory":"Historique des sorties de stock",
+    "filter":"filtre",
+    "export": "Exporter",
+  "sale": "Vente",
+  "productName": "Nom du produit",
+  "category": "Catégorie",
+  "unitPrice": "Prix unitaire",
+  "Returned": "Retourné",
+  "Discount": "Remise",
+  "date": "Date",
+  "totalValue": "Valeur totale",
+  "action": "Action",
+  "saleProducts": "Sortie de Produit du Stock",
+  "saleSubTitile": "Enregistrer les détails des produits quittant le magasin ou l'entrepôt",
+  "back": "Retour",
+  "Edit": "Modifier",
+  "Delete": "Supprimer",
+  "view": "Voir Plus"
+  },
+  "reciept": {
+    "quantitySold": "Quantité vendue",
+    "soldPrice": "Prix de vente (RWF)",
+    "discount": "Remise",
+    "soldDate": "Date de vente",
+    "isReturned": "Est retourné",
+    "warranty": "Garantie",
+    "buyerDetails": "Détails de l'acheteur",
+    "buyer": "Acheteur",
+    "buyerPhoneNumber": "Numéro de téléphone de l'acheteur",
+    "print": "Imprimer",
+    "edit": "Modifier",
+    "productDetails": "Détails du produit"
+  },
+  "updateProduct": {
+    "pageTitle": "Modifier la vente",
+    "pageSubtitle": "Mettez à jour les informations de cette vente, y compris les détails du produit, le paiement et les données client.",
+    "sectionCustomer": "Informations client",
+    "updateButton": "Mettre à jour la vente",
+    "cancelButton": "Annuler",
+    "productName": "Nom du produit",
+    "category": "Catégorie",
+    "quantity": "Quantité",
+    "sellingPrice": "Prix de vente",
+    "discount": "Remise",
+    "customerName": "Nom du client",
+    "customerContact": "Contact du client",
+    "paymentMethod": "Mode de paiement",
+    "customerInformation": "Informations du Client"
   }
+  
+  
 }

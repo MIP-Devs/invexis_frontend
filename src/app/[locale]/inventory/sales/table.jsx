@@ -1,34 +1,8 @@
-// filepath: d:\invexis\invexis_frontend\src\app\inventory\sales\table.jsx
 "use client";
 import { useRouter } from "next/navigation";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Toolbar,
-  IconButton,
-  Typography,
-  TextField,
-  Box,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-  Popover,
-  Select,
-  InputLabel,
-  FormControl,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
+import {Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,Toolbar,IconButton,Typography,TextField,Box,Menu,MenuItem,ListItemIcon,ListItemText,Popover,Select,InputLabel,FormControl,Dialog,DialogTitle,DialogContent,DialogActions,Button,
 } from "@mui/material";
-
+import { useLocale } from "next-intl";
 import ViewColumnIcon from "@mui/icons-material/ViewColumn";
 import FilterAltRoundedIcon from "@mui/icons-material/FilterAltRounded";
 import CloudDownloadRoundedIcon from "@mui/icons-material/CloudDownloadRounded";
@@ -40,6 +14,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useState, useMemo, useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 const rows = [
   { id: 1, ProductName: "John Doe theBadman", Category: "Electronics", UnitPrice: 100, returned:"false", Discount: "20%", Date: "12/09/2024", TotalValue: 40, action: "more" },
@@ -69,6 +44,7 @@ const ConfirmDialog = ({ open, title, message, onConfirm, onCancel }) => (
 const RowActionsMenu = ({ rowId, onRedirect, onDeleteRequest }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const t = useTranslations("sales");
 
   const handleClick = (event) => {
     event.stopPropagation();
@@ -86,9 +62,10 @@ const RowActionsMenu = ({ rowId, onRedirect, onDeleteRequest }) => {
   };
 
   const navigate = useRouter();
+  const locale = useLocale();
   const handleEdit = (event) => {
     event.stopPropagation();
-    navigate.push(`/inventory/sales/${rowId}/${rowId}`);
+    navigate.push(`/${locale}/inventory/sales/${rowId}/${rowId}`);
     handleClose();
   };
 
@@ -140,15 +117,15 @@ const RowActionsMenu = ({ rowId, onRedirect, onDeleteRequest }) => {
       >
         <MenuItem onClick={handleView}>
           <ListItemIcon><VisibilityIcon sx={{ color: "#333" }} /></ListItemIcon>
-          <ListItemText primary="View" />
+          <ListItemText primary={`${t('view')}`} />
         </MenuItem>
         <MenuItem onClick={handleEdit}>
           <ListItemIcon><EditIcon sx={{ color: "#333" }} /></ListItemIcon>
-          <ListItemText primary="Edit" />
+          <ListItemText primary={`${t('Edit')}`} />
         </MenuItem>
         <MenuItem onClick={handleDelete} sx={{ color: "error.main" }}>
           <ListItemIcon><DeleteIcon sx={{ color: "error.main" }} /></ListItemIcon>
-          <ListItemText primary="Delete" />
+          <ListItemText primary={`${t('Delete')}`}  />
         </MenuItem>
       </Menu>
     </>
@@ -317,6 +294,7 @@ const FilterPopover = ({ anchorEl, onClose, onFilterChange, currentFilter }) => 
 // ----------------------------------------------------------------------
 
 const DataTable = () => {
+  const t = useTranslations("sales");
   const navigation = useRouter();
   const [search, setSearch] = useState("");
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
@@ -345,9 +323,10 @@ const DataTable = () => {
   const handleCancelDelete = () => {
     setDeleteModal({ open: false, id: null });
   };
+  const locale = useLocale();
 
   const handleRedirectToSlug = (id) => {
-    navigation.push(`/inventory/sales/${id}`);
+    navigation.push(`/${locale}/inventory/sales/${id}`);
   };
 
   const handleOpenFilter = (event) => {
@@ -426,7 +405,7 @@ const DataTable = () => {
         }}
       >
         <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-          Stock-Out History
+          {t("stockOutHistory")}
         </Typography>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
@@ -451,13 +430,13 @@ const DataTable = () => {
                     color: activeFilter.value ? 'black' : 'black',
                     filter: activeFilter.value ? 'drop-shadow(0 0 4px rgba(0, 123, 255, 0.4))' : 'none'}}
             />
-            <small className="font-bold text-black text-sm ">Filter</small>
+            <small className="font-bold text-black text-sm ">{t('filter')}</small>
           </IconButton>
 
           <IconButton sx={{bgcolor:"none"}} className="space-x-3"  >
             <CloudDownloadRoundedIcon
             sx={{ padding:"2px", color: "black" }}  />
-            <small className="font-bold text-black text-sm ">Export</small>
+            <small className="font-bold text-black text-sm ">{t('export')}</small>
           </IconButton>
         </Box>
       </Toolbar>
@@ -466,15 +445,42 @@ const DataTable = () => {
         <Table stickyHeader>
           <TableHead>
             <TableRow sx={{ backgroundColor: "#1976d2" }}>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Sale</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Product Name</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Category</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Unit Price (FRW)</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Returned</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Discount</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Date</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Total Value</TableCell>
-              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>Actions</TableCell>
+              <TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>
+  {t("sale")}
+</TableCell>
+
+<TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>
+  {t("productName")}
+</TableCell>
+
+<TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>
+  {t("category")}
+</TableCell>
+
+<TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>
+  {t("unitPrice")} (FRW)
+</TableCell>
+
+<TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>
+  {t("Returned")}
+</TableCell>
+
+<TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>
+  {t("Discount")}
+</TableCell>
+
+<TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>
+  {t("date")}
+</TableCell>
+
+<TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>
+  {t("totalValue")}
+</TableCell>
+
+<TableCell sx={{ color: "#ff9500", fontWeight: "bold" }}>
+  {t("action")}
+</TableCell>
+
             </TableRow>
           </TableHead>
 

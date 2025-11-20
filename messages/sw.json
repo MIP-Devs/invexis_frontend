@@ -221,5 +221,47 @@
   "termsPopup": {
     "title": "Sheria na Sera ya Faragha",
     "description": "Tafadhali angalia na kukubali Sheria na Masharti yetu na Sera ya Faragha kabla ya kuendelea."
+  },
+  "sales":{
+     "title": "Dhibiti na Fuatilia Rekodi Zote za Mauzo",
+  "dashboard": "Dashibodi",
+  "products": "Bidhaa",
+  "list": "Orodha",
+  "stockOut": "Ondoa Stoki",
+  "stockOutHistory": "Historia ya Uondoaji wa Stoki",
+  "filter":"kichujio",
+  "export": "Hamisha nje",
+  "sale": "Uuzaji",
+  "productName": "Jina la Bidhaa",
+  "category": "Kategoria",
+  "unitPrice": "Bei kwa Kimoja",
+  "Returned": "Zimerudishwa",
+  "Discount": "Punguzo",
+  "date": "Tarehe",
+  "totalValue": "Thamani Jumla",
+  "action": "Kitendo",
+  "saleProducts": "Ondoa Bidhaa Kwenye Stoki",
+  "saleSubTitile": "Rekodi maelezo ya bidhaa zinazoondoka dukani au ghala",
+  "back": "Rudi",
+  "Edit": "Hariri",
+  "Delete": "Futa",
+  "view": "Tazama Zaidi"
+},
+"reciept": {
+    "quantitySold": "Idadi Iliyouzwa",
+    "soldPrice": "Bei ya Kuuza (RWF)",
+    "discount": "Punguzo",
+    "soldDate": "Tarehe ya Kuuza",
+    "isReturned": "Imerudishwa",
+    "warranty": "Dhamana",
+    "buyerDetails": "Maelezo ya Mnunuzi",
+    "buyer": "Mnunuzi",
+    "buyerPhoneNumber": "Namba ya Simu ya Mnunuzi",
+    "print": "Chapisha",
+    "edit": "Hariri",
+    "productDetails": "Maelezo ya Bidhaa",
+    "customerInformation": "Taarifa za Mteja"
   }
+
 }
+
