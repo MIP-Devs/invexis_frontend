@@ -1,10 +1,7 @@
-import Image from "next/image";
-import { Button } from "@/components/shared/button";
 
-export default function Home() {
-  return (
-    <>
-    <Button variant="outline"> Josh </Button >
-    </>
-  );
+import { redirect } from "next/navigation";
+
+export default function RootPage() {
+  // Redirect to default locale
+  redirect("/en");
 }
