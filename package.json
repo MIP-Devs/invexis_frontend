@@ -11,46 +11,43 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@mui/material": "^7.3.2",
-<<<<<<< HEAD
-    "@radix-ui/react-slot": "^1.2.3",
-    "@reduxjs/toolkit": "^2.9.0",
-=======
+    "@mui/icons-material": "^7.3.4",
+    "@mui/material": "^7.3.4",
     "@mui/x-data-grid": "^8.11.3",
     "@radix-ui/react-slot": "^1.2.3",
     "@reduxjs/toolkit": "^2.9.1",
->>>>>>> master
     "@tanstack/react-query": "^5.85.6",
     "@tanstack/react-table": "^8.21.3",
     "axios": "^1.11.0",
-    "axois": "^0.0.1-security",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.12",
     "i18next": "^25.4.2",
+    "jspdf": "^3.0.3",
+    "lottie-react": "^2.4.1",
     "lucide-react": "^0.542.0",
     "next": "15.5.0",
     "next-i18next": "^15.4.2",
+    "next-intl": "^4.4.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-i18next": "^15.7.3",
     "react-icons": "^5.5.0",
     "react-redux": "^9.2.0",
-<<<<<<< HEAD
-=======
     "recharts": "^3.2.1",
->>>>>>> master
     "redux-persist": "^6.0.0",
     "socket.io-client": "^4.8.1",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+<<<<<<< HEAD
     "@tailwindcss/postcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.5.0",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.7"
+=======
     "@tailwindcss/postcss": "^4.1.13",
     "@types/node": "^24.8.1",
     "@types/react": "^19.2.2",

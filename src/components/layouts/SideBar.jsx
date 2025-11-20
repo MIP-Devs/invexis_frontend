@@ -1,86 +1,98 @@
-<<<<<<< HEAD
-import React from 'react'
-
-const SideBar = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
-
-export default SideBar
-=======
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useLocale } from "next-intl";
 import {
   LayoutDashboard,
-  ShoppingBag,
   BarChart3,
+  FileSpreadsheet,
   Users,
   Package,
+  ShoppingBag,
+  Wallet,
   ShoppingCart,
-  FileSpreadsheet,
-  Briefcase,
+  Receipt,
+  UserCheck,
+  FileText,
+  AlertCircle,
   Menu,
   ChevronDown,
-  AlertCircle
 } from "lucide-react";
 
+/* STATIC NAV ITEMS */
 const navItems = [
-  { title: "Dashboard", icon: <LayoutDashboard size={22} />, path: "/" },
-  { title: "Sales", icon: <ShoppingBag size={22} />, path: "/inventory/sales" },
+  // OVERVIEW
+  { title: "Dashboard", icon: <LayoutDashboard size={22} />, path: "/inventory/dashboard" },
   { title: "Analytics", icon: <BarChart3 size={22} />, path: "/inventory/analytics" },
-  { title: "Shops", icon: <Users size={22} />, path: "/inventory/companies" },
-  { title: "Billing & Payments", icon: <Package size={22} />, path: "/inventory/billing" },
   { title: "Reports", icon: <FileSpreadsheet size={22} />, path: "/inventory/reports" },
 
+  // MANAGEMENT
   {
-    title: "Workers",
+    title: "Staff & Branches",
     icon: <Users size={22} />,
     children: [
-    
-    
-      { title: "List", path: "/inventory/users/list" },
-      { title: "Profile", path: "/inventory/users/profile" }
+      { title: "Staff List", path: "/inventory/workers/list" },
+      { title: "Branches", path: "/inventory/companies" },
+      { title: "Worker Profile", path: "/inventory/users/profile" },
     ],
   },
   {
     title: "Inventory",
     icon: <Package size={22} />,
     children: [
-      { title: "Overview", path: "/inventory/products/overview" },
-      { title: "List", path: "/inventory/products/list" },
-      { title: "Add product", path: "/inventory/stock" },
-      { title: "Details", path: "/inventory/products/details" }
+      { title: "Product List", path: "/inventory/products/list" },
+      { title: "Product Details", path: "/inventory/products/details" },
     ],
   },
+
+  // SALES → NO CHILDREN
   {
-    title: "Purchase",
-    icon: <Briefcase size={22} />,
+    title: "Sales",
+    icon: <ShoppingBag size={22} />,
+    path: "/inventory/sales",
+  },
+
+  {
+    title: "Debts",
+    icon: <Wallet size={22} />,
     children: [
-      { title: "List", path: "/inventory/audit/list" },
-      { title: "Details", path: "/inventory/audit/details" }
+      { title: "Debts List", path: "/inventory/Debts/list" },
+      { title: "Debts Details", path: "/inventory/Debts/details" },
     ],
   },
   {
-    title: "Ecommerce",
+    title: "E-commerce",
     icon: <ShoppingCart size={22} />,
     children: [
       { title: "Orders", path: "/inventory/orders/list" },
-      { title: "Products", path: "/inventory/orders/details" }
+      { title: "Products", path: "/inventory/products/ecommerce" },
+    ],
+  },
+  {
+    title: "Billing & Payments",
+    icon: <Receipt size={22} />,
+    children: [
+      { title: "Invoices", path: "/inventory/billing/invoices" },
+      { title: "Payments", path: "/inventory/billing/payments" },
+    ],
+  },
+  {
+    title: "Debt Manager",
+    icon: <UserCheck size={22} />,
+    children: [
+      { title: "Customer Debts", path: "/inventory/debts/customers" },
+      { title: "Supplier Debts", path: "/inventory/debts/suppliers" },
     ],
   },
   {
     title: "Documents",
-    icon: <FileSpreadsheet size={22} />,
+    icon: <FileText size={22} />,
     children: [
-      { title: "Invoice", path: "/inventory/invoices/list" },
-      { title: "PaymentHistory", path: "/inventory/invoices/details" }
+      { title: "Invoices", path: "/inventory/invoices/list" },
+      { title: "Payment History", path: "/inventory/invoices/details" },
     ],
   },
   {
@@ -88,247 +100,209 @@ const navItems = [
     icon: <AlertCircle size={22} />,
     children: [
       { title: "List", path: "/inventory/announcements/list" },
-      { title: "Details", path: "/inventory/announcements/details" }
+      { title: "Create / Details", path: "/inventory/announcements/details" },
     ],
   },
 ];
 
 export default function SideBar({ expanded: controlledExpanded, setExpanded: setControlledExpanded }) {
-  const isControlled =
-    typeof controlledExpanded === "boolean" && typeof setControlledExpanded === "function";
+  const pathname = usePathname();
+  const locale = useLocale();
 
   const [expandedInternal, setExpandedInternal] = useState(true);
   const [openMenus, setOpenMenus] = useState([]);
   const [hoverMenu, setHoverMenu] = useState(null);
   const [hoverPosition, setHoverPosition] = useState({ top: 0 });
 
-  const pathname = usePathname();
+  const expanded = typeof controlledExpanded === "boolean" ? controlledExpanded : expandedInternal;
 
-  // Helper function to check if a menu item is active
-  const isMenuActive = (item) => {
-    if (item.path) {
-      return pathname === item.path;
-    }
-    if (item.children) {
-      return item.children.some(child => pathname === child.path);
-    }
-    return false;
-  };
+  const setExpanded = useCallback(
+    (v) => {
+      if (typeof controlledExpanded === "boolean") setControlledExpanded(v);
+      else {
+        setExpandedInternal(v);
+        localStorage.setItem("sidebar-expanded", String(v));
+      }
+    },
+    [controlledExpanded, setControlledExpanded]
+  );
 
-  // Helper function to check if a child item is active
-  const isChildActive = (childPath) => {
-    return pathname === childPath;
-  };
+  const isActive = useCallback(
+    (path) =>
+      pathname === `/${locale}${path}` ||
+      pathname.startsWith(`/${locale}${path}/`),
+    [pathname, locale]
+  );
 
-  // Auto-expand menus that contain the current active page
+  /* hover prefetch */
+  const handleHoverEnter = useCallback(
+    (e, item) => {
+      if (!expanded && item.children) {
+        const rect = e.currentTarget.getBoundingClientRect();
+        setHoverMenu(item.title);
+        setHoverPosition({ top: rect.top + window.scrollY });
+      }
+    },
+    [expanded]
+  );
+
+  const handleHoverLeave = () => !expanded && setHoverMenu(null);
+
+  /* Auto-open active parent */
   useEffect(() => {
-    const activeMenus = navItems
-      .filter(item => item.children && item.children.some(child => pathname === child.path))
-      .map(item => item.title);
-    
-    setOpenMenus(prev => {
-      const newOpenMenus = [...new Set([...prev, ...activeMenus])];
-      return newOpenMenus;
-    });
-  }, [pathname]);
-
-  useEffect(() => {
-    if (!isControlled) {
-      const saved = localStorage.getItem("sidebar-expanded");
-      setExpandedInternal(saved === null ? true : saved === "true");
-    }
-  }, [isControlled]);
-
-  const expanded = isControlled ? controlledExpanded : expandedInternal;
-  const setExpanded = (val) => {
-    if (isControlled) setControlledExpanded(val);
-    else {
-      setExpandedInternal(val);
-      localStorage.setItem("sidebar-expanded", String(val));
-    }
-  };
-
-  const toggleMenu = (title) => {
-    setOpenMenus((prev) =>
-      prev.includes(title) ? prev.filter((t) => t !== title) : [...prev, title]
-    );
-  };
-
-  const handleHoverEnter = (e, item) => {
-    if (!expanded && item.children) {
-      const rect = e.currentTarget.getBoundingClientRect();
-      setHoverMenu(item.title);
-      setHoverPosition({ top: rect.top });
-    }
-  };
-
-  const handleHoverLeave = () => {
-    if (!expanded) {
-      setHoverMenu(null);
-    }
-  };
+    const activeParents = navItems
+      .filter((item) => item.children?.some((child) => isActive(child.path)))
+      .map((item) => item.title);
+    setOpenMenus(activeParents);
+  }, [pathname, isActive]);
 
   return (
     <>
-      <aside
-        className={`${
-          expanded ? "w-64" : "w-20"
-        } h-screen bg-white border-r flex flex-col fixed top-0 left-0 overflow-y-auto transition-[width] duration-400 ease-in-out scrollbar-thin scrollbar-thumb-gray-300 z-30`}
-      >
-        {/* Header */}
-        <div className="flex items-center justify-between px-4 py-4 border-b">
-          <div className="flex items-center gap-3">
-            <button
-              aria-label="toggle sidebar"
-              onClick={() => setExpanded(!expanded)}
-              className="p-1 rounded text-gray-900 hover:bg-gray-100 hover:text-gray-900 transition-transform duration-200 active:scale-95"
-            >
-              <Menu size={22} />
-            </button>
-            <div
-              className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                expanded
-                  ? "opacity-100 translate-x-0 w-auto"
-                  : "opacity-0 -translate-x-4 w-0"
-              }`}
-            >
-              <span className="font-bold text-lg text-gray-950 select-none whitespace-nowrap">
-                Invex<span className="text-orange-500 font-extrabold">Is</span>
-              </span>
-            </div>
+      {/* SIDEBAR */}
+      <aside className={`fixed inset-y-0 left-0 z-30 bg-white border-r transition-all duration-300 ${expanded ? "w-64" : "w-16"}`}>
+        
+        {/* HEADER */}
+        <div className="flex items-center justify-between px-4 py-5 border-b">
+          <button onClick={() => setExpanded(!expanded)} className="p-2 rounded-lg hover:bg-gray-100">
+            <Menu size={22} />
+          </button>
+
+          <div className={`overflow-hidden transition-all ${expanded ? "w-40" : "w-0"}`}>
+            <span className="text-xl font-bold text-gray-900">
+              INVEX<span className="text-orange-500 font-extrabold">iS</span>
+            </span>
           </div>
         </div>
 
-        {/* Nav */}
-        <nav className="flex-1 px-2 py-4 text-gray-900">
-          <h3
-            className={`text-xs font-semibold text-gray-400 px-3 mb-2 transition-opacity duration-300 ${
-              expanded ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            OVERVIEW
-          </h3>
-          {navItems.slice(0, 6).map((item) => (
-            <div className="p-0.5" key={item.title}>
+        {/* NAVIGATION */}
+        <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-8">
+          
+          {/* OVERVIEW */}
+          <section>
+            <h3 className={`text-xs font-semibold text-gray-500 uppercase mb-2 ${expanded ? "" : "opacity-0"}`}>
+              Overview
+            </h3>
+
+            {navItems.slice(0, 3).map((item) => (
               <Link
-                href={item.path}
-                className={`flex items-center gap-3 px-3 py-3 rounded-lg cursor-pointer transition-colors duration-200 ${
-                  isMenuActive(item)
-                    ? "bg-orange-500 text-white font-semibold"
-                    : "hover:bg-orange-300/50"
+                key={item.title}
+                href={`/${locale}${item.path}`}
+                className={`flex items-center gap-3 px-3 py-3 rounded-lg transition ${
+                  isActive(item.path)
+                    ? "bg-orange-500 text-white"
+                    : "text-gray-700 hover:bg-orange-50"
                 }`}
               >
                 {item.icon}
-                <span
-                  className={`transition-all duration-300 ease-in-out ${
-                    expanded
-                      ? "opacity-100 translate-x-0"
-                      : "opacity-0 -translate-x-4 w-0 hidden"
-                  }`}
-                >
-                  {item.title}
-                </span>
+                {expanded && <span>{item.title}</span>}
               </Link>
-            </div>
-          ))}
+            ))}
+          </section>
 
-          <h3
-            className={`text-xs font-semibold text-gray-400 px-2 mt-4 mb-2 transition-opacity duration-300 ${
-              expanded ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            MANAGEMENT
-          </h3>
+          {/* MANAGEMENT */}
+          <section>
+            <h3 className={`text-xs font-semibold text-gray-500 uppercase mb-2 ${expanded ? "" : "opacity-0"}`}>
+              Management
+            </h3>
 
-          {navItems.slice(6).map((item) => {
-            const isActive = isMenuActive(item);
-            const isOpen = openMenus.includes(item.title);
-            
-            return (
-              <div
-                key={item.title}
-                className="relative"
-                onMouseEnter={(e) => handleHoverEnter(e, item)}
-                onMouseLeave={handleHoverLeave}
-              >
-                <div
-                  className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors duration-200 ${
-                    isActive
-                      ? "bg-orange-500 text-white font-semibold"
-                      : "hover:bg-orange-500 hover:text-white"
-                  }`}
-                  onClick={() => expanded && item.children && toggleMenu(item.title)}
-                >
-                  <div className="flex items-center gap-3">
-                    {item.icon}
-                    <span
-                      className={`transition-all duration-300 ease-in-out ${
-                        expanded
-                          ? "opacity-100 translate-x-0"
-                          : "opacity-0 -translate-x-4 w-0 hidden"
+            {navItems.slice(3).map((item) => {
+              const parentActive = item.children?.some((c) => isActive(c.path));
+
+              /* =========================
+                 RENDER PARENT ITEM
+              ========================== */
+              return (
+                <div key={item.title} onMouseEnter={(e) => handleHoverEnter(e, item)} onMouseLeave={handleHoverLeave}>
+                  
+                  {/* Single-item (Sales) */}
+                  {!item.children && (
+                    <Link
+                      href={`/${locale}${item.path}`}
+                      className={`flex items-center gap-3 px-3 py-3 rounded-lg transition ${
+                        isActive(item.path)
+                          ? "bg-orange-500 text-white"
+                          : "text-gray-700 hover:bg-orange-50"
                       }`}
                     >
-                      {item.title}
-                    </span>
-                  </div>
-                  {item.children && expanded && (
-                    <div
-                      className={`transform transition-transform duration-300 ${
-                        isOpen ? "rotate-180" : "rotate-0"
-                      }`}
-                    >
-                      <ChevronDown size={20} />
-                    </div>
+                      {item.icon}
+                      {expanded && <span>{item.title}</span>}
+                    </Link>
                   )}
-                </div>
 
-                {/* Submenu - Expanded Sidebar */}
-                {item.children && isOpen && expanded && (
-                  <div className="ml-8 mt-1 flex flex-col overflow-hidden transition-all duration-300 ease-in-out">
-                    {item.children.map((child) => (
-                      <Link
-                        key={child.title}
-                        href={child.path}
-                        className={`text-left px-3 py-2 text-sm rounded cursor-pointer transition-colors duration-200 ${
-                          isChildActive(child.path)
-                            ? "bg-orange-100 text-orange-600 font-semibold border-l-2 border-orange-500"
-                            : "text-gray-500 hover:bg-orange-50 hover:text-orange-600"
+                  {/* Parent Dropdown */}
+                  {item.children && (
+                    <>
+                      <div
+                        onClick={() =>
+                          expanded &&
+                          setOpenMenus((prev) =>
+                            prev.includes(item.title)
+                              ? prev.filter((x) => x !== item.title)
+                              : [...prev, item.title]
+                          )
+                        }
+                        className={`relative flex items-center justify-between px-3 py-3 rounded-lg cursor-pointer transition ${
+                          parentActive
+                            ? "bg-orange-50 text-orange-700 border border-orange-200"
+                            : "text-gray-700 hover:bg-orange-50"
                         }`}
                       >
-                        {child.title}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                        {parentActive && (
+                          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-orange-500 rounded-full"></span>
+                        )}
+
+                        <div className="flex items-center gap-3">
+                          {item.icon}
+                          {expanded && <span>{item.title}</span>}
+                        </div>
+
+                        {expanded && <ChevronDown size={18} className={`${openMenus.includes(item.title) ? "rotate-180" : ""}`} />}
+                      </div>
+
+                      {/* Children → FIXED WITH SAFE CHECK */}
+                      {expanded && item.children && openMenus.includes(item.title) && (
+                        <div className="ml-10 mt-2 border-l-2 border-orange-200 pl-4 space-y-1">
+                          {item.children.map((child) => (
+                            <Link
+                              key={child.title}
+                              href={`/${locale}${child.path}`}
+                              className={`block px-3 py-2 text-sm rounded-md transition ${
+                                isActive(child.path)
+                                  ? "bg-orange-500 text-white"
+                                  : "text-gray-600 hover:bg-gray-100"
+                              }`}
+                            >
+                              {child.title}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              );
+            })}
+          </section>
         </nav>
       </aside>
 
-      {/* Collapsed Sidebar Hover Menu (Portal) */}
+      {/* HOVER MENU */}
       {hoverMenu &&
-        !expanded &&
         createPortal(
           <div
-            style={{ position: "fixed", top: hoverPosition.top, left: "80px" }}
-            className="w-44 bg-white border rounded-lg py-2 z-50 shadow-lg animate-fade-in"
+            style={{ top: hoverPosition.top, left: 80 }}
+            className="fixed w-56 bg-white rounded-lg shadow-xl border py-3 z-50"
           >
-            <div className="px-3 pb-2 border-b">
-              <div className="text-sm font-bold text-gray-700">{hoverMenu}</div>
-            </div>
-            <div className="flex flex-col mt-2">
+            <div className="px-4 pb-2 border-b font-semibold text-gray-800">{hoverMenu}</div>
+
+            <div className="mt-2">
               {navItems
-                .find((n) => n.title === hoverMenu)
+                .find((i) => i.title === hoverMenu)
                 ?.children?.map((child) => (
                   <Link
                     key={child.title}
-                    href={child.path}
-                    className={`text-left px-3 py-2 text-sm transition-colors duration-200 w-full ${
-                      isChildActive(child.path)
-                        ? "bg-orange-100 text-orange-600 font-semibold border-l-2 border-orange-500"
-                        : "hover:bg-gray-100 text-gray-700"
-                    }`}
+                    href={`/${locale}${child.path}`}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     {child.title}
                   </Link>
@@ -340,4 +314,3 @@ export default function SideBar({ expanded: controlledExpanded, setExpanded: set
     </>
   );
 }
->>>>>>> master
