@@ -21,6 +21,7 @@ import {
   Menu,
   ChevronDown,
 } from "lucide-react";
+import { title } from "process";
 
 /* STATIC NAV ITEMS */
 const navItems = [
@@ -43,8 +44,12 @@ const navItems = [
     title: "Inventory",
     icon: <Package size={22} />,
     children: [
-      { title: "Product List", path: "/inventory/products/list" },
-      { title: "Product Details", path: "/inventory/products/details" },
+      { title: "Overview", path: "/inventory/Overview" },
+      { title: "Products", path: "/inventory/products" },
+      {title: "Categories", path: "/inventory/categories" },
+      { title: "Reports", path: "/inventory/report" },
+      { title: "Alerts", path: "/inventory/alerts" },
+
     ],
   },
 

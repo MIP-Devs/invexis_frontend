@@ -238,5 +238,21 @@
     "ip": "127.0.0.1",
     "device": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
     "country": "Rwanda"
+  },
+  {
+    "id": "s31",
+    "user_id": "u1",
+    "start_time": "2025-11-20T14:11:37.013Z",
+    "ip": "127.0.0.1",
+    "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0",
+    "country": "Rwanda"
+  },
+  {
+    "id": "s32",
+    "user_id": "u1",
+    "start_time": "2025-11-21T08:43:16.328Z",
+    "ip": "127.0.0.1",
+    "device": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0",
+    "country": "Rwanda"
   }
 ]

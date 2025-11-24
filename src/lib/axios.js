@@ -1,39 +1,34 @@
-import axios from "axios";
+import axios from 'axios';
 
-// Base configuration
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api", // backend API
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api',
+  timeout: 30000,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
-  withCredentials: true, // for cookies (optional)
 });
 
-// Request Interceptor → attach token
+// Request interceptor
 api.interceptors.request.use(
   (config) => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    const token = localStorage.getItem('authToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    return Promise.reject(error);
+  }
 );
 
-// Response Interceptor → handle errors
+// Response interceptor
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response) {
-      // Example: if unauthorized, redirect to login
-      if (error.response.status === 401) {
-        console.warn("Unauthorized! Redirecting to login...");
-        if (typeof window !== "undefined") {
-          localStorage.removeItem("token");
-          window.location.href = "/auth/login";
-        }
-      }
+    if (error.response?.status === 401) {
+      localStorage.removeItem('authToken');
+      window.location.href = '/auth/login';
     }
     return Promise.reject(error);
   }
