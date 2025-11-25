@@ -46,7 +46,7 @@ export default function EditProductPage({ params }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (id) dispatch(fetchProductById(id));
+    if (id) dispatch(fetchProductById(id));cls
   }, [dispatch, id]);
 
   // The hook will initialize formData when `product` (initialData) is provided.

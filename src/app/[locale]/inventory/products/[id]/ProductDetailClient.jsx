@@ -9,10 +9,19 @@ import { toast } from 'react-hot-toast';
 import { ArrowLeft, Edit, Trash2, Download } from 'lucide-react';
 
 function Field({ label, value }) {
+  let display;
+  if (value === undefined || value === null) display = 'N/A';
+  else if (React.isValidElement(value)) display = value;
+  else if (typeof value === 'object') {
+    if (Array.isArray(value)) display = value.join(', ');
+    else if (value.short) display = value.short;
+    else display = JSON.stringify(value);
+  } else display = value;
+
   return (
     <div>
       <label className="text-xs text-gray-500">{label}</label>
-      <div className="mt-1 font-medium">{value}</div>
+      <div className="mt-1 font-medium wrap-break-word">{display}</div>
     </div>
   );
 }
@@ -205,7 +214,11 @@ function DetailInner({ id }) {
 
                   <div className="bg-white border rounded-lg p-4">
                     <h3 className="text-sm text-gray-600 mb-2">Description</h3>
-                    <p className="text-sm text-gray-700">{product.description || 'No description provided.'}</p>
+                    <p className="text-sm text-gray-700">
+                      {typeof product.description === 'string'
+                        ? product.description
+                        : product.description?.short || product.description?.long || 'No description provided.'}
+                    </p>
                   </div>
                 </div>
               )}
